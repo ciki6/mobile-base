@@ -1,11 +1,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import profileImg from '../../assets/icon/profile.png'
+import dataFillingIcon from '../../assets/icon/dashboard_dataFilling.png'
 export default defineComponent({
   setup() {
+    const dataInput = () => {
+
+    }
     return {
       active: ref(0),
-      profileImg
+      profileImg,
+      dataInput, dataFillingIcon
     };
   },
 })
@@ -28,7 +33,11 @@ export default defineComponent({
               </div>
               <van-divider :style="{ margin: '.1rem' }" />
               <van-grid :column-num="3" :gutter="10" :border="false">
-                <van-grid-item icon="photo-o" text="数据填报" />
+                <van-grid-item text="数据填报" @click="dataInput()">
+                  <template v-slot:icon>
+                    <img :src="dataFillingIcon" class="bashboardIcon" />
+                  </template>
+                </van-grid-item>
                 <van-grid-item icon="photo-o" text="数据审核" />
                 <van-grid-item icon="photo-o" text="数据查询" />
               </van-grid>
@@ -113,5 +122,9 @@ export default defineComponent({
   background-color: rgb(34, 122, 220);
   border-radius: 0.5rem;
   display: inline-block;
+}
+
+.bashboardIcon {
+  width: 3rem;
 }
 </style>
