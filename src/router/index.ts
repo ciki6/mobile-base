@@ -1,16 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Layout from '../layout/index.vue';
+import MoblieLayout from '../layout/index_m.vue';
+import PCLayout from '../layout/index_p.vue';
 
-export const constantRoutes = [
+const moblieRoutes = [
   {
     path: '/',
     redirect: '/dashboard',
-    component: Layout,
+  },
+  {
+    path: '/dashboard',
+    component: MoblieLayout,
     children: [
       {
         path: '/dashboard',
-        name: 'Dashboard',
-        component: () => import('../views/dashboard/index.vue'),
+        name: 'MobileDashboard',
+        component: () => import('../views/mobile/dashboard/index.vue'),
         meta: {
           title: '首页',
           icon: 'home-outlined',
@@ -22,12 +26,12 @@ export const constantRoutes = [
   },
   {
     path: '/purchase',
-    component: Layout,
+    component: MoblieLayout,
     children: [
       {
         path: '/purchase',
-        name: 'Purchase',
-        component: () => import('../views/purchase/index.vue'),
+        name: 'MobilePurchase',
+        component: () => import('../views/mobile/purchase/index.vue'),
         meta: {
           title: '首页',
           icon: 'home-outlined',
@@ -39,12 +43,12 @@ export const constantRoutes = [
   },
   {
     path: '/sales',
-    component: Layout,
+    component: MoblieLayout,
     children: [
       {
         path: '/sales',
-        name: 'Sales',
-        component: () => import('../views/sales/index.vue'),
+        name: 'MobileSales',
+        component: () => import('../views/mobile/sales/index.vue'),
         meta: {
           title: '首页',
           icon: 'home-outlined',
@@ -56,12 +60,12 @@ export const constantRoutes = [
   },
   {
     path: '/transportation',
-    component: Layout,
+    component: MoblieLayout,
     children: [
       {
         path: '/transportation',
-        name: 'Transportation',
-        component: () => import('../views/transportation/index.vue'),
+        name: 'MobileTransportation',
+        component: () => import('../views/mobile/transportation/index.vue'),
         meta: {
           title: '首页',
           icon: 'home-outlined',
@@ -73,7 +77,7 @@ export const constantRoutes = [
   },
   {
     path: '/error',
-    component: Layout,
+    component: MoblieLayout,
     meta: {
       title: 'error',
       icon: 'home-outlined',
@@ -84,7 +88,7 @@ export const constantRoutes = [
       {
         path: '/404',
         name: '404',
-        component: () => import('../views/error/404.vue'),
+        component: () => import('../views/mobile/error/404.vue'),
         meta: {
           title: '404',
           icon: 'home-outlined',
@@ -95,9 +99,99 @@ export const constantRoutes = [
     ],
   },
 ];
+
+const pcRoutes = [
+  {
+    path: '/',
+    redirect: '/dashboard',
+  },
+  {
+    path: '/dashboard',
+    component: PCLayout,
+    children: [
+      {
+        path: '/dashboard',
+        name: 'PcDashboard',
+        component: () => import('../views/pc/dashboard/index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard',
+        },
+      },{
+        path: '/dataFilling',
+        name: 'PcDataFilling',
+        component: () => import('../views/pc/dataFilling/index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard',
+        },
+      },
+    ],
+  },
+  {
+    path: '/purchase',
+    component: PCLayout,
+    children: [
+      {
+        path: '/purchase',
+        name: 'PcPurchase',
+        component: () => import('../views/pc/purchase/index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'purchase',
+        },
+      },
+    ],
+  },
+  {
+    path: '/sales',
+    component: PCLayout,
+    children: [
+      {
+        path: '/sales',
+        name: 'PcSales',
+        component: () => import('../views/pc/sales/index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'sales',
+        },
+      },
+    ],
+  },
+  {
+    path: '/transportation',
+    component: PCLayout,
+    children: [
+      {
+        path: '/transportation',
+        name: 'PcTransportation',
+        component: () => import('../views/pc/transportation/index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'transportation',
+        },
+      },
+    ],
+  },
+];
+
+const isMoblie = navigator.userAgent.match(
+  /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+);
+
 const router = createRouter({
   history: createWebHistory(),
-  routes: constantRoutes,
+  routes: isMoblie ? moblieRoutes : pcRoutes,
 });
 
 export default router;

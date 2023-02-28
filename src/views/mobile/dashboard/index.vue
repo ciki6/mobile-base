@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import profileImg from '../../assets/icon/profile.png'
-import dataFillingIcon from '../../assets/icon/dashboard_dataFilling.png'
+import profileImg from '../../../assets/icon/profile.png'
+import dataFillingIcon from '../../../assets/icon/dashboard_dataFilling.png'
 export default defineComponent({
   setup() {
     const dataInput = () => {
