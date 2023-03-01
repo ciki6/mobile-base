@@ -140,6 +140,17 @@ const pcRoutes = [
           code: 'dashboard-issueWork',
         },
       },
+      {
+        path: '/dashboard-dataAudit',
+        name: 'PcDataAudit',
+        component: () => import('../views/pc/dashboard/subViews/dataAudit/index.vue'),
+        meta: {
+          title: '数据审核总览',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard-dataAudit',
+        },
+      },
     ],
   },
   {
