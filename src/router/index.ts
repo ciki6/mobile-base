@@ -164,6 +164,18 @@ const pcRoutes = [
           code: 'dashboard-workIssueOverview',
         },
       },
+      {
+        path: '/dashboard-fillingProcess',
+        name: 'PcFillingProcess',
+        component: () => import('../views/pc/dashboard/subViews/fillingProcess/index.vue'),
+        meta: {
+          title: '填报流程',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard-fillingProcess',
+        },
+      },
+      // fillingProcess
     ],
   },
   {

@@ -27,15 +27,12 @@
           </div>
         </el-col>
         <el-col :span="4" class="search-btns">
-          <el-button type="primary" :icon="Search" @click="search">
+          <el-button type="primary" :icon="Search" round @click="search">
             查询
           </el-button>
-          <el-button type="info" :icon="RefreshRight" @click="reset"
-            >重置</el-button
-          >
         </el-col>
       </el-row>
-      <el-scrollbar height="70vh">
+      <el-scrollbar height="65vh">
         <el-table :data="planTable" stripe style="width: 100%">
           <el-table-column
             v-for="col in planTableColumn"
@@ -44,6 +41,16 @@
             :key="col.prop"
             align="center"
           >
+          </el-table-column>
+          <el-table-column>
+            <template v-slot="{ row, $index }">
+              <el-button type="primary" round @click="setRole(row)">
+                角色配置
+              </el-button>
+              <el-button type="primary" round @click="setOrgnization(row)">
+                组织配置
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-scrollbar>
@@ -54,13 +61,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-import {
-  CircleCheck,
-  Search,
-  ArrowLeftBold,
-  RefreshRight,
-  User,
-} from "@element-plus/icons-vue";
+import { Search, ArrowLeftBold } from "@element-plus/icons-vue";
 
 const router = useRouter();
 const statusOptions = [
@@ -90,7 +91,12 @@ const planTable = ref<any>([
 ]);
 
 const search = () => {};
-const reset = () => {};
+const setRole = (row: any) => {
+  console.log(row);
+};
+const setOrgnization = (row: any) => {
+  console.log(row);
+};
 
 onMounted(() => {});
 </script>

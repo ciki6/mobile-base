@@ -51,10 +51,10 @@
           </el-col>
         </el-row>
         <div class="search-btns">
-          <el-button type="primary" :icon="Search" @click="search">
+          <el-button type="primary" :icon="Search" round @click="search">
             查询
           </el-button>
-          <el-button type="info" :icon="RefreshRight" @click="reset"
+          <el-button type="info" :icon="RefreshRight" round @click="reset"
             >重置</el-button
           >
         </div>
