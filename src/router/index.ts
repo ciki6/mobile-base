@@ -120,14 +120,24 @@ const pcRoutes = [
           code: 'dashboard',
         },
       },{
-        path: '/dataFilling',
+        path: '/dashboard-dataFilling',
         name: 'PcDataFilling',
-        component: () => import('../views/pc/dataFilling/index.vue'),
+        component: () => import('../views/pc/dashboard/subViews/dataFilling/index.vue'),
         meta: {
-          title: '首页',
+          title: '数据填报',
           icon: 'home-outlined',
           affix: true,
-          code: 'dashboard',
+          code: 'dashboard-dataFilling',
+        },
+      },{
+        path: '/dashboard-issueWork',
+        name: 'PcIssueWork',
+        component: () => import('../views/pc/dashboard/subViews/issueWork/index.vue'),
+        meta: {
+          title: '工作下发',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard-issueWork',
         },
       },
     ],
