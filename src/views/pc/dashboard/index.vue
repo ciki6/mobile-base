@@ -1,57 +1,71 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router';
-import dataFilling from '../../../assets/icon/dashboard_dataFilling.png';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+import dataFilling from "../../../assets/icon/dashboard_dataFilling.png";
+import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
+import dataAudit from "../../../assets/icon/dashborad_dataReview.png";
+import workIssueOverview from "../../../assets/icon/dashborad_dataReview.png";
+
 export default defineComponent({
   setup() {
-    const router = useRouter()
+    const router = useRouter();
     const jump = (path: string) => {
-      router.push(path)
-    }
-    const enterList = [{
-      name: '数据填报',
-      icon: dataFilling,
-      path: 'dataFilling'
-    }, {
-      name: '工作下发',
-      icon: dataFilling,
-      path: 'dataFilling'
-    }, {
-      name: '数据审核总览',
-      icon: dataFilling,
-      path: 'dataFilling'
-    }, {
-      name: '工作下发总览',
-      icon: dataFilling,
-      path: 'dataFilling'
-    }, {
-      name: '填报流程',
-      icon: dataFilling,
-      path: 'dataFilling'
-    }];
-    const dataCheck = [{
-      id: 1,
-      title: '建装站计划提报单1',
-      user: '李四',
-      date: '2023年2月20日'
-    }, {
-      id: 2,
-      title: '建装站计划提报单2',
-      user: '李四',
-      date: '2023年2月20日'
-    }, {
-      id: 3,
-      title: '建装站计划提报单3',
-      user: '李四',
-      date: '2023年2月20日'
-    }]
+      router.push("dashboard-" + path);
+    };
+    const enterList = [
+      {
+        name: "数据填报",
+        icon: dataFilling,
+        path: "dataFilling",
+      },
+      {
+        name: "工作下发",
+        icon: IssueWork,
+        path: "issueWork",
+      },
+      {
+        name: "数据审核总览",
+        icon: dataAudit,
+        path: "dataAudit",
+      },
+      {
+        name: "工作下发总览",
+        icon: workIssueOverview,
+        path: "workIssueOverview",
+      },
+      {
+        name: "填报流程",
+        icon: dataFilling,
+        path: "dataFilling",
+      },
+    ];
+    const dataCheck = [
+      {
+        id: 1,
+        title: "建装站计划提报单1",
+        user: "李四",
+        date: "2023年2月20日",
+      },
+      {
+        id: 2,
+        title: "建装站计划提报单2",
+        user: "李四",
+        date: "2023年2月20日",
+      },
+      {
+        id: 3,
+        title: "建装站计划提报单3",
+        user: "李四",
+        date: "2023年2月20日",
+      },
+    ];
     return {
       enterList,
       dataCheck,
-      jump
+      jump,
     };
   },
-})
+});
 </script>
 <template>
   <div class="container">
@@ -64,7 +78,12 @@ export default defineComponent({
           </div>
         </template>
         <div class="card-body">
-          <div v-for="o in enterList" :key="o.name" class="enter-item" @click="jump(o.path)">
+          <div
+            v-for="o in enterList"
+            :key="o.name"
+            class="enter-item"
+            @click="jump(o.path)"
+          >
             <img class="enter-icon" :src="o.icon" />
             <div class="enter-text">{{ o.name }}</div>
           </div>
