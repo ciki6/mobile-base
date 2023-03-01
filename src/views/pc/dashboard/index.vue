@@ -4,6 +4,8 @@ import { useRouter } from "vue-router";
 import dataFilling from "../../../assets/icon/dashboard_dataFilling.png";
 import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
 import dataAudit from "../../../assets/icon/dashborad_dataReview.png";
+import workIssueOverview from "../../../assets/icon/dashborad_dataReview.png";
+
 export default defineComponent({
   setup() {
     const router = useRouter();
@@ -28,8 +30,8 @@ export default defineComponent({
       },
       {
         name: "工作下发总览",
-        icon: dataFilling,
-        path: "dataFilling",
+        icon: workIssueOverview,
+        path: "workIssueOverview",
       },
       {
         name: "填报流程",

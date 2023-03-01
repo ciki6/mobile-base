@@ -119,7 +119,8 @@ const pcRoutes = [
           affix: true,
           code: 'dashboard',
         },
-      },{
+      },
+      {
         path: '/dashboard-dataFilling',
         name: 'PcDataFilling',
         component: () => import('../views/pc/dashboard/subViews/dataFilling/index.vue'),
@@ -129,7 +130,8 @@ const pcRoutes = [
           affix: true,
           code: 'dashboard-dataFilling',
         },
-      },{
+      },
+      {
         path: '/dashboard-issueWork',
         name: 'PcIssueWork',
         component: () => import('../views/pc/dashboard/subViews/issueWork/index.vue'),
@@ -149,6 +151,17 @@ const pcRoutes = [
           icon: 'home-outlined',
           affix: true,
           code: 'dashboard-dataAudit',
+        },
+      },
+      {
+        path: '/dashboard-workIssueOverview',
+        name: 'PcWorkIssueOverview',
+        component: () => import('../views/pc/dashboard/subViews/workIssueOverview/index.vue'),
+        meta: {
+          title: '工作下发总览',
+          icon: 'home-outlined',
+          affix: true,
+          code: 'dashboard-workIssueOverview',
         },
       },
     ],
