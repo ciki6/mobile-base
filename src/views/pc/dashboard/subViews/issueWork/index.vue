@@ -18,65 +18,63 @@
           :disabled="newRows.some((item) => item.new)" -->
       </div>
     </div>
-    <div class="panel">
-      <el-card>
-        <el-form :model="issuesData" label-width="80px" label-position="left">
-          <el-form-item label="任务名称:">
-            <el-input v-model="issuesData.name" />
-          </el-form-item>
-          <el-form-item label="任务等级:">
-            <el-select v-model="issuesData.level" placeholder="请选择">
-              <el-option
-                v-for="item in levelOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            /></el-select>
-          </el-form-item>
-          <el-form-item label="开始时间:">
-            <el-date-picker v-model="issuesData.start" type="datetime" />
-          </el-form-item>
-          <el-form-item label="结束时间:">
-            <el-date-picker v-model="issuesData.end" type="datetime" />
-          </el-form-item>
-          <el-form-item label="任务描述:">
-            <el-input
-              v-model="issuesData.description"
-              type="textarea"
-              :rows="5"
-              resize="none"
-            />
-          </el-form-item>
-          <el-form-item label="插入附件:">
-            <el-upload
-              v-model:file-list="issuesData.fileList"
-              class="upload-demo"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              multiple
-            >
-              <!--  :on-preview="handlePreview"
+    <el-card class="panel">
+      <el-form :model="issuesData" label-width="80px" label-position="left">
+        <el-form-item label="任务名称:">
+          <el-input v-model="issuesData.name" />
+        </el-form-item>
+        <el-form-item label="任务等级:">
+          <el-select v-model="issuesData.level" placeholder="请选择">
+            <el-option
+              v-for="item in levelOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          /></el-select>
+        </el-form-item>
+        <el-form-item label="开始时间:">
+          <el-date-picker v-model="issuesData.start" type="datetime" />
+        </el-form-item>
+        <el-form-item label="结束时间:">
+          <el-date-picker v-model="issuesData.end" type="datetime" />
+        </el-form-item>
+        <el-form-item label="任务描述:">
+          <el-input
+            v-model="issuesData.description"
+            type="textarea"
+            :rows="5"
+            resize="none"
+          />
+        </el-form-item>
+        <el-form-item label="插入附件:">
+          <el-upload
+            v-model:file-list="issuesData.fileList"
+            class="upload-demo"
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            multiple
+          >
+            <!--  :on-preview="handlePreview"
               :on-remove="handleRemove"
               :before-remove="beforeRemove"
               :limit="3"
               :on-exceed="handleExceed" -->
-              <!-- <el-button type="primary">Click to upload</el-button> -->
-              <el-icon size="20" style="margin-top: 5px"
-                ><Paperclip color="rgb(64,158,255)"
-              /></el-icon>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="参与者:">
-            <!-- <el-input v-model="issuesData.description" /> -->
-            <el-icon
-              size="20"
-              style="margin-top: 5px; cursor: pointer"
-              @click="choosePeople"
-              ><User color="rgb(64,158,255)"
+            <!-- <el-button type="primary">Click to upload</el-button> -->
+            <el-icon size="20" style="margin-top: 5px"
+              ><Paperclip color="rgb(64,158,255)"
             /></el-icon>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="参与者:">
+          <!-- <el-input v-model="issuesData.description" /> -->
+          <el-icon
+            size="20"
+            style="margin-top: 5px; cursor: pointer"
+            @click="choosePeople"
+            ><User color="rgb(64,158,255)"
+          /></el-icon>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 <script lang="ts" setup>
@@ -133,6 +131,7 @@ onMounted(() => {});
     }
   }
   .panel {
+    height: 75vh;
     .el-input,
     .el-select {
       width: 300px;

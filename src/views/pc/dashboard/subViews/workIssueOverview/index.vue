@@ -59,18 +59,16 @@
           >
         </div>
       </div>
-      <el-scrollbar height="65vh">
-        <el-table :data="planTable" stripe style="width: 100%">
-          <el-table-column
-            v-for="col in planTableColumn"
-            :prop="col.prop"
-            :label="col.label"
-            :key="col.prop"
-            align="center"
-          >
-          </el-table-column>
-        </el-table>
-      </el-scrollbar>
+      <el-table :data="planTable" max-height="55vh" stripe style="width: 100%">
+        <el-table-column
+          v-for="col in planTableColumn"
+          :prop="col.prop"
+          :label="col.label"
+          :key="col.prop"
+          align="center"
+        >
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -154,6 +152,7 @@ onMounted(() => {});
     }
   }
   .panel {
+    height: 75vh;
     .search {
       margin: 20px 0;
       .search-row {

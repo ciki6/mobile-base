@@ -32,28 +32,32 @@
           </el-button>
         </el-col>
       </el-row>
-      <el-scrollbar height="65vh">
-        <el-table :data="planTable" stripe style="width: 100%">
-          <el-table-column
-            v-for="col in planTableColumn"
-            :prop="col.prop"
-            :label="col.label"
-            :key="col.prop"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column>
-            <template v-slot="{ row, $index }">
-              <el-button type="primary" round @click="setRole(row)">
-                角色配置
-              </el-button>
-              <el-button type="primary" round @click="setOrgnization(row)">
-                组织配置
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-scrollbar>
+      <el-table :data="planTable" max-height="65vh" stripe style="width: 100%">
+        <el-table-column
+          v-for="col in planTableColumn"
+          :prop="col.prop"
+          :label="col.label"
+          :key="col.prop"
+          align="center"
+          show-overflow-tooltip
+        >
+        </el-table-column>
+        <el-table-column>
+          <template v-slot="{ row, $index }">
+            <el-button type="primary" round @click="setRole(row)" size="small">
+              角色配置
+            </el-button>
+            <el-button
+              type="primary"
+              round
+              @click="setOrgnization(row)"
+              size="small"
+            >
+              组织配置
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -124,6 +128,7 @@ onMounted(() => {});
     }
   }
   .panel {
+    height: 75vh;
     .search {
       margin-bottom: 20px;
       .search-items {

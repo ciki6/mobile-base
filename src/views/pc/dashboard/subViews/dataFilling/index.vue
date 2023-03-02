@@ -37,6 +37,7 @@
                 :prop="col.prop"
                 :label="col.label"
                 :key="col.prop"
+                show-overflow-tooltip
                 align="center"
               >
                 <template v-slot="{ row, $index }">
@@ -64,6 +65,7 @@
                 :prop="col.prop"
                 :label="col.label"
                 :key="col.prop"
+                show-overflow-tooltip
                 align="center"
               />
             </el-table>

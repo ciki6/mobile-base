@@ -69,90 +69,92 @@ export default defineComponent({
 });
 </script>
 <template>
-  <div class="container">
-    <div class="title">工作台</div>
-    <div class="panel">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span>快捷入口</span>
+  <el-scrollbar height="100%">
+    <div class="container">
+      <div class="title">工作台</div>
+      <div class="panel">
+        <el-card class="box-card">
+          <template #header>
+            <div class="card-header">
+              <span>快捷入口</span>
+            </div>
+          </template>
+          <div class="card-body">
+            <div
+              v-for="o in enterList"
+              :key="o.name"
+              class="enter-item"
+              @click="jump(o.path)"
+            >
+              <img class="enter-icon" :src="o.icon" />
+              <div class="enter-text">{{ o.name }}</div>
+            </div>
           </div>
-        </template>
-        <div class="card-body">
-          <div
-            v-for="o in enterList"
-            :key="o.name"
-            class="enter-item"
-            @click="jump(o.path)"
-          >
-            <img class="enter-icon" :src="o.icon" />
-            <div class="enter-text">{{ o.name }}</div>
+        </el-card>
+      </div>
+      <div class="panel">
+        <el-card class="box-card">
+          <template #header>
+            <div class="card-header">
+              <span>数据审核</span>
+            </div>
+          </template>
+          <div class="list-card-body">
+            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+              <el-row>
+                <el-col :span="18">{{ o.title }}</el-col>
+                <el-col :span="3">{{ o.user }}</el-col>
+                <el-col :span="3">{{ o.date }}</el-col>
+              </el-row>
+              <el-divider />
+            </div>
           </div>
-        </div>
-      </el-card>
+        </el-card>
+      </div>
+      <div class="panel">
+        <el-card class="box-card">
+          <template #header>
+            <div class="card-header">
+              <span>工作下发（待完成）</span>
+            </div>
+          </template>
+          <div class="list-card-body">
+            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+              <el-row>
+                <el-col :span="18">{{ o.title }}</el-col>
+                <el-col :span="3">{{ o.user }}</el-col>
+                <el-col :span="3">{{ o.date }}</el-col>
+              </el-row>
+              <el-divider />
+            </div>
+          </div>
+        </el-card>
+      </div>
+      <div class="panel">
+        <el-card class="box-card">
+          <template #header>
+            <div class="card-header">
+              <span>工作下发（已完成）</span>
+            </div>
+          </template>
+          <div class="list-card-body">
+            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+              <el-row>
+                <el-col :span="18">{{ o.title }}</el-col>
+                <el-col :span="3">{{ o.user }}</el-col>
+                <el-col :span="3">{{ o.date }}</el-col>
+              </el-row>
+              <el-divider />
+            </div>
+          </div>
+        </el-card>
+      </div>
     </div>
-    <div class="panel">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span>数据审核</span>
-          </div>
-        </template>
-        <div class="list-card-body">
-          <div v-for="o in dataCheck" :key="o.id" class="list-item">
-            <el-row>
-              <el-col :span="18">{{ o.title }}</el-col>
-              <el-col :span="3">{{ o.user }}</el-col>
-              <el-col :span="3">{{ o.date }}</el-col>
-            </el-row>
-            <el-divider />
-          </div>
-        </div>
-      </el-card>
-    </div>
-    <div class="panel">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span>工作下发（待完成）</span>
-          </div>
-        </template>
-        <div class="list-card-body">
-          <div v-for="o in dataCheck" :key="o.id" class="list-item">
-            <el-row>
-              <el-col :span="18">{{ o.title }}</el-col>
-              <el-col :span="3">{{ o.user }}</el-col>
-              <el-col :span="3">{{ o.date }}</el-col>
-            </el-row>
-            <el-divider />
-          </div>
-        </div>
-      </el-card>
-    </div>
-    <div class="panel">
-      <el-card class="box-card">
-        <template #header>
-          <div class="card-header">
-            <span>工作下发（已完成）</span>
-          </div>
-        </template>
-        <div class="list-card-body">
-          <div v-for="o in dataCheck" :key="o.id" class="list-item">
-            <el-row>
-              <el-col :span="18">{{ o.title }}</el-col>
-              <el-col :span="3">{{ o.user }}</el-col>
-              <el-col :span="3">{{ o.date }}</el-col>
-            </el-row>
-            <el-divider />
-          </div>
-        </div>
-      </el-card>
-    </div>
-  </div>
+  </el-scrollbar>
 </template>
 <style scoped>
 .container {
-  padding: 0 8%;
+  padding: 0 8% 2%;
   background-color: rgb(230, 229, 233);
 }
 
@@ -184,6 +186,8 @@ export default defineComponent({
 
 .panel {
   background-color: #ffffff;
-  margin-bottom: 50px;
+}
+.panel + .panel {
+  margin-top: 50px;
 }
 </style>
