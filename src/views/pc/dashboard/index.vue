@@ -4,8 +4,8 @@ import { useRouter } from "vue-router";
 import dataFilling from "../../../assets/icon/dashboard_dataFilling.png";
 import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
 import dataAudit from "../../../assets/icon/dashborad_dataReview.png";
-import workIssueOverview from "../../../assets/icon/dashborad_dataReview.png";
-import fillingProcess from "../../../assets/icon/dashborad_dataReview.png";
+import workIssueOverview from "../../../assets/icon/dashborad_workIssueOverview.png";
+import fillingProcess from "../../../assets/icon/dashborad_fillingProcess.png";
 
 export default defineComponent({
   setup() {
@@ -36,7 +36,7 @@ export default defineComponent({
       },
       {
         name: "填报流程",
-        icon: dataFilling,
+        icon: fillingProcess,
         path: "fillingProcess",
       },
     ];
