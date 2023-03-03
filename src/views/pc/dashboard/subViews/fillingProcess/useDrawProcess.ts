@@ -151,7 +151,8 @@ export const useDrawProcess = (apiFuncs?: Function[]) => {
       .data(nodeData)
       .enter()
       .append("g")
-      .attr("class", "node");
+      .attr("class", "node")
+      .style("cursor", "pointer");
     nodes
       .append("rect")
       .attr("x", (d: any) => d.column * columnStep + (d.column - 1) * rectWidth)
