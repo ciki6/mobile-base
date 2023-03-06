@@ -5,7 +5,7 @@
         <el-icon class="title-icon" :size="20" @click="router.go(-1)"
           ><ArrowLeftBold
         /></el-icon>
-        <div class="title-text">数据审核总览</div>
+        <div class="title-text">在轨信息填报总览</div>
       </div>
     </div>
     <el-card class="panel">
@@ -15,24 +15,17 @@
             <div class="label">编号：</div>
             <el-input v-model="searchQuery.number" placeholder="请输入编号" />
           </div>
-          <div class="search-item">
-            <div class="label">状态：</div>
-            <el-select v-model="searchQuery.status" placeholder="请选择">
-              <el-option
-                v-for="item in statusOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-            /></el-select>
-          </div>
         </el-col>
         <el-col :span="4" class="search-btns">
           <el-button type="primary" :icon="Search" round @click="search">
             查询
           </el-button>
+          <el-button type="info" :icon="RefreshRight" round @click="reset">
+            重置
+          </el-button>
         </el-col>
       </el-row>
-      <el-table :data="planTable" max-height="65vh" stripe style="width: 100%">
+      <el-table :data="planTable" max-height="55vh" stripe style="width: 100%">
         <el-table-column
           v-for="col in planTableColumn"
           :prop="col.prop"
@@ -42,22 +35,15 @@
           show-overflow-tooltip
         >
         </el-table-column>
-        <el-table-column>
-          <template v-slot="{ row, $index }">
-            <el-button type="primary" round @click="setRole(row)" size="small">
-              角色配置
-            </el-button>
-            <el-button
-              type="primary"
-              round
-              @click="setOrgnization(row)"
-              size="small"
-            >
-              组织配置
-            </el-button>
-          </template>
-        </el-table-column>
       </el-table>
+      <el-button
+        type="primary"
+        :icon="Plus"
+        round
+        @click="router.push('dashboard-trackStatusFilling')"
+      >
+        新增在轨信息
+      </el-button>
     </el-card>
   </div>
 </template>
@@ -65,36 +51,46 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-import { Search, ArrowLeftBold } from "@element-plus/icons-vue";
+import {
+  Search,
+  ArrowLeftBold,
+  RefreshRight,
+  Plus,
+} from "@element-plus/icons-vue";
 
 const router = useRouter();
-const statusOptions = [
-  { label: "1", value: 1 },
-  { label: "2", value: 2 },
-];
-const searchQuery = ref({ number: "", status: "" });
+
+const searchQuery = ref({ number: "" });
 
 // 表格data
 const planTableColumn = [
   { prop: "index", label: "序号" },
   { prop: "number", label: "编号" },
   { prop: "createPerson", label: "创建人" },
-  { prop: "createTime", label: "创建时间" },
+  { prop: "createTime", label: "创建日期" },
   { prop: "actingOperator", label: "代操作人" },
-  { prop: "status", label: "状态" },
 ];
-const planTable = ref<any>([
+interface tableRowProps {
+  index: number;
+  number: string;
+  createPerson: string;
+  createTime: string;
+  actingOperator: string;
+}
+const planTable = ref<tableRowProps[]>([
   {
     index: 1,
     number: "监装站计划提报单2023/2/20",
     createPerson: "李四",
-    createTime: "2023年2月20日 16：28：48",
-    actingOperator: "  ",
-    status: "未提交",
+    createTime: "2023年2月20日",
+    actingOperator: "王五",
   },
 ]);
 
 const search = () => {};
+const reset = () => {
+  searchQuery.value = { number: "" };
+};
 const setRole = (row: any) => {
   console.log(row);
 };
@@ -169,6 +165,9 @@ onMounted(() => {});
     }
     :deep(.el-table th.el-table__cell) {
       background-color: #e5f3ff;
+    }
+    .el-table {
+      margin-bottom: 28px;
     }
   }
 }
