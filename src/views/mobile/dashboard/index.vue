@@ -1,35 +1,18 @@
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import profileImg from '../../../assets/icon/profile.png'
-import dataFillingIcon from '../../../assets/icon/dashboard_dataFilling.png'
-export default defineComponent({
-  setup() {
-    const dataInput = () => {
-
-    }
-    return {
-      active: ref(0),
-      profileImg,
-      dataInput, dataFillingIcon
-    };
-  },
-})
-</script>
 <template>
   <div class="container">
     <van-row>
-      <van-col span="24">
-        <van-image width="100%" height="8rem" :block="true" :src="profileImg" />
-      </van-col>
       <van-col offset="1" span="22">
         <van-row>
           <van-col span="24">
-            <div class="title"><van-icon name="chat-o" size="1.3rem" />工作台 ></div>
+            <div class="title">
+              <van-icon name="chat-o" size="1.3rem" />工作台 >
+            </div>
           </van-col>
           <van-col span="24">
             <div class="panel">
               <div class="panel-title">
-                <div class="blue-badge"></div>信息填报
+                <div class="blue-badge"></div>
+                信息填报
               </div>
               <van-divider :style="{ margin: '.1rem' }" />
               <van-grid :column-num="3" :gutter="10" :border="false">
@@ -46,7 +29,8 @@ export default defineComponent({
           <van-col span="24">
             <div class="panel">
               <div class="panel-title">
-                <div class="blue-badge"></div>任务板
+                <div class="blue-badge"></div>
+                任务板
               </div>
               <van-divider :style="{ margin: '.1rem' }" />
               <van-grid :column-num="3" :gutter="10" :border="false">
@@ -59,7 +43,8 @@ export default defineComponent({
           <van-col span="24">
             <div class="panel">
               <div class="panel-title">
-                <div class="blue-badge"></div>工作发文
+                <div class="blue-badge"></div>
+                工作发文
               </div>
               <van-divider :style="{ margin: '.1rem' }" />
               <van-grid :column-num="3" :gutter="10" :border="false">
@@ -71,7 +56,8 @@ export default defineComponent({
           <van-col span="24">
             <div class="panel">
               <div class="panel-title">
-                <div class="blue-badge"></div>角色/权限管理
+                <div class="blue-badge"></div>
+                角色/权限管理
               </div>
               <van-divider :style="{ margin: '.1rem' }" />
               <van-grid :column-num="3" :gutter="10" :border="false">
@@ -83,11 +69,20 @@ export default defineComponent({
           </van-col>
         </van-row>
       </van-col>
-
     </van-row>
   </div>
 </template>
-<style scoped>
+
+<script lang="ts" setup>
+import { defineComponent, ref } from "vue";
+import profileImg from "../../../assets/icon/profile.png";
+import dataFillingIcon from "../../../assets/icon/dashboard_dataFilling.png";
+
+const active = ref(0);
+const dataInput = () => {};
+</script>
+
+<style scoped lang="less">
 .container {
   background-color: rgb(235, 235, 235);
 }
@@ -98,7 +93,7 @@ export default defineComponent({
 
 .title {
   font-weight: bolder;
-  font-family: '黑体';
+  font-family: "黑体";
   font-size: 1.3rem;
 }
 
@@ -111,7 +106,7 @@ export default defineComponent({
 
 .panel-title {
   font-weight: bolder;
-  font-family: '黑体';
+  font-family: "黑体";
   font-size: 1.2rem;
 }
 

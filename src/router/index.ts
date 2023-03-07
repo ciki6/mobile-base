@@ -260,6 +260,29 @@ const pcRoutes = [
       },
     ],
   },
+  {
+    path: "/error",
+    component: PCLayout,
+    meta: {
+      title: "error",
+      icon: "home-outlined",
+      affix: true,
+    },
+    hidden: true,
+    children: [
+      {
+        path: "/404",
+        name: "404",
+        component: () => import("../views/pc/error/404.vue"),
+        meta: {
+          title: "404",
+          icon: "home-outlined",
+          affix: true,
+          code: "404",
+        },
+      },
+    ],
+  },
 ];
 
 const isMoblie = navigator.userAgent.match(
@@ -269,6 +292,28 @@ const isMoblie = navigator.userAgent.match(
 const router = createRouter({
   history: createWebHistory(),
   routes: isMoblie ? moblieRoutes : pcRoutes,
+});
+
+const roleRights = ["issueWork", "readWork", "processWork"];
+router.beforeEach((to, from, next) => {
+  if (!isMoblie) {
+    if (to.path === "/dashboard-issueWork") {
+      if (
+        (to.query?.pageStatus === "0" && roleRights.includes("issueWork")) ||
+        (to.query?.pageStatus === "1" && roleRights.includes("readWork")) ||
+        (to.query?.pageStatus === "2" && roleRights.includes("processWork"))
+      ) {
+        next();
+      } else {
+        next("/404");
+      }
+    } else {
+      next();
+    }
+  } else {
+    // 手机端后面再补充
+    next();
+  }
 });
 
 export default router;

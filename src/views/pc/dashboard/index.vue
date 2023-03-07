@@ -49,7 +49,14 @@
             </div>
           </template>
           <div class="list-card-body">
-            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+            <div
+              v-for="o in dataCheck"
+              :key="o.id"
+              class="list-item"
+              @click="
+                jump({ path: 'issueWork', query: { id: o.id, pageStatus: 1 } })
+              "
+            >
               <el-row>
                 <el-col :span="18">{{ o.title }}</el-col>
                 <el-col :span="3">{{ o.user }}</el-col>
@@ -64,11 +71,18 @@
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
-              <span>工作下发（已完成）</span>
+              <span>工作下发（待审核）</span>
             </div>
           </template>
           <div class="list-card-body">
-            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+            <div
+              v-for="o in dataCheck"
+              :key="o.id"
+              class="list-item"
+              @click="
+                jump({ path: 'issueWork', query: { id: o.id, pageStatus: 2 } })
+              "
+            >
               <el-row>
                 <el-col :span="18">{{ o.title }}</el-col>
                 <el-col :span="3">{{ o.user }}</el-col>
@@ -100,20 +114,17 @@ import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
 import dataOverview from "../../../assets/icon/dashborad_dataOverview.png";
 import workIssueOverview from "../../../assets/icon/dashborad_workIssueOverview.png";
 import fillingProcess from "../../../assets/icon/dashborad_fillingProcess.png";
-interface enterModule {
-  name?: string;
-  icon?: string;
-  path?: string;
-  feature?: string;
-}
 
 const router = useRouter();
 
 const jumpChooseVisb = ref(false);
-const jump = (enterObject: enterModule) => {
+const jump = (enterObject: any) => {
   if (enterObject.path) {
     if (jumpChooseVisb.value) jumpChooseVisb.value = false;
-    router.push("dashboard-" + enterObject.path);
+    router.push({
+      path: "dashboard-" + enterObject.path,
+      query: enterObject.query,
+    });
   } else {
     switch (enterObject.feature) {
       case "upload":
@@ -148,6 +159,7 @@ const enterList = [
     name: "工作下发",
     icon: IssueWork,
     path: "issueWork",
+    query: { pageStatus: 0 },
   },
   {
     name: "数据填报总览",
@@ -231,5 +243,8 @@ const dataCheck = [
   cursor: pointer;
   text-align: center;
   font-size: 18px;
+}
+.list-item {
+  cursor: pointer;
 }
 </style>
