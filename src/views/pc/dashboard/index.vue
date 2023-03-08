@@ -30,7 +30,17 @@
             </div>
           </template>
           <div class="list-card-body">
-            <div v-for="o in dataCheck" :key="o.id" class="list-item">
+            <div
+              v-for="o in dataCheck"
+              :key="o.id"
+              class="list-item"
+              @click="
+                jump({
+                  path: 'dataFilling',
+                  query: { id: o.id, pageStatus: 'process' },
+                })
+              "
+            >
               <el-row>
                 <el-col :span="18">{{ o.title }}</el-col>
                 <el-col :span="3">{{ o.user }}</el-col>
@@ -54,7 +64,10 @@
               :key="o.id"
               class="list-item"
               @click="
-                jump({ path: 'issueWork', query: { id: o.id, pageStatus: 1 } })
+                jump({
+                  path: 'issueWork',
+                  query: { id: o.id, pageStatus: 'fill' },
+                })
               "
             >
               <el-row>
@@ -80,7 +93,10 @@
               :key="o.id"
               class="list-item"
               @click="
-                jump({ path: 'issueWork', query: { id: o.id, pageStatus: 2 } })
+                jump({
+                  path: 'issueWork',
+                  query: { id: o.id, pageStatus: 'process' },
+                })
               "
             >
               <el-row>
@@ -143,6 +159,7 @@ const enterList = [
     name: "数据填报",
     icon: dataFilling,
     path: "dataFilling",
+    query: { pageStatus: "add" },
   },
   {
     name: "在轨信息填报",
@@ -159,7 +176,7 @@ const enterList = [
     name: "工作下发",
     icon: IssueWork,
     path: "issueWork",
-    query: { pageStatus: 0 },
+    query: { pageStatus: "add" },
   },
   {
     name: "数据填报总览",

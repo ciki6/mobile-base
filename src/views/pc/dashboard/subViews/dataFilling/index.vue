@@ -8,17 +8,27 @@
         <div class="title-text">数据填报</div>
       </div>
       <div class="action-btns">
-        <el-button type="info" :icon="Document" round @click="save"
-          >保存</el-button
-        >
-        <el-button
-          type="primary"
-          :icon="CircleCheck"
-          round
-          @click="submit"
-          :disabled="newRows.some((item) => item.new)"
-          >提交</el-button
-        >
+        <template v-if="pageStatus === 'add'">
+          <el-button type="info" :icon="Document" round @click="save"
+            >保存</el-button
+          >
+          <el-button
+            type="primary"
+            :icon="CircleCheck"
+            round
+            @click="submit"
+            :disabled="newRows.some((item) => item.new)"
+            >提交</el-button
+          >
+        </template>
+        <template v-else>
+          <el-button type="info" :icon="CircleClose" round @click="reject"
+            >驳回</el-button
+          >
+          <el-button type="primary" :icon="CircleCheck" round @click="pass"
+            >提交</el-button
+          >
+        </template>
       </div>
     </div>
     <div class="panel">
@@ -46,8 +56,21 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-button type="primary" :icon="Plus" round @click="addPlan"
+            <el-button
+              v-if="pageStatus === 'add'"
+              type="primary"
+              :icon="Plus"
+              round
+              @click="addPlan"
               >新增行</el-button
+            >
+            <el-button
+              v-else
+              type="primary"
+              :icon="Refresh"
+              round
+              @click="changePlan"
+              >变更</el-button
             >
           </div>
         </el-card>
@@ -76,17 +99,28 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import {
   Plus,
   CircleCheck,
   Document,
   ArrowLeftBold,
+  CircleClose,
+  Refresh,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
+const currentRoute = useRoute();
 
+const pageStatus = computed(() => currentRoute.query.pageStatus);
+const planId = computed(() => currentRoute.query.id);
+
+onMounted(() => {
+  if (planId) {
+    // 查询数据 planTable recordTable
+  }
+});
 // 表格data
 const planTableColumn = [
   { prop: "station", label: "站台" },
@@ -161,11 +195,15 @@ const save = () => {
     delete item.new;
   });
 };
-
 // 提交newRows
 const submit = () => {
   console.log(newRows.value, "======newRows");
 };
+
+// 审核函数
+const changePlan = () => {};
+const reject = () => {};
+const pass = () => {};
 </script>
 <style lang="less" scoped>
 .container {

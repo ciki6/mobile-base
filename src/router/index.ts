@@ -294,26 +294,8 @@ const router = createRouter({
   routes: isMoblie ? moblieRoutes : pcRoutes,
 });
 
-const roleRights = ["issueWork", "readWork", "processWork"];
-router.beforeEach((to, from, next) => {
-  if (!isMoblie) {
-    if (to.path === "/dashboard-issueWork") {
-      if (
-        (to.query?.pageStatus === "0" && roleRights.includes("issueWork")) ||
-        (to.query?.pageStatus === "1" && roleRights.includes("readWork")) ||
-        (to.query?.pageStatus === "2" && roleRights.includes("processWork"))
-      ) {
-        next();
-      } else {
-        next("/404");
-      }
-    } else {
-      next();
-    }
-  } else {
-    // 手机端后面再补充
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+
+// });
 
 export default router;

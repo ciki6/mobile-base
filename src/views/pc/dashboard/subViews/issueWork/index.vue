@@ -24,105 +24,38 @@
       </div>
     </div>
     <el-card class="panel">
-      <el-form :model="issuesData" label-width="80px" label-position="left">
-        <template v-for="item in issuesDataProps">
-          <el-form-item
-            v-if="item.pageStatus && item.pageStatus.includes(pageStatus)"
-            :key="item.prop"
-            :label="item.label + ':'"
-          >
-            <template v-if="!pageStatus">
-              <el-input
-                v-if="item.type === 'input'"
-                v-model="issuesData[item.prop]"
-              />
-              <el-input
-                v-if="item.type === 'textarea'"
-                v-model="issuesData[item.prop]"
-                :rows="item.row || 5"
-                :resize="item.resize || 'none'"
-              />
-              <el-select
-                v-if="item.type === 'select'"
-                v-model="issuesData[item.prop]"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="optionItem in item.options"
-                  :key="optionItem.value"
-                  :label="optionItem.label"
-                  :value="optionItem.value"
-                />
-              </el-select>
-              <el-date-picker
-                v-if="item.type === 'datetime'"
-                v-model="issuesData[item.prop]"
-                type="datetime"
-              />
-              <el-upload
-                v-if="item.type === 'upload'"
-                v-model:file-list="issuesData[item.prop]"
-                class="upload-demo"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                multiple
-              >
-                <!--  :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              :limit="3"
-              :on-exceed="handleExceed" -->
-                <el-icon size="20" style="margin-top: 5px"
-                  ><Paperclip color="rgb(64,158,255)"
-                /></el-icon>
-              </el-upload>
-              <template v-if="item.type === 'icon'">
-                <el-icon
-                  :size="item.size || 20"
-                  style="margin-top: 5px; cursor: pointer"
-                  @click="item.btnFun"
-                  ><User color="rgb(64,158,255)"
-                /></el-icon>
-                <!-- 人员tag -->
-              </template>
-            </template>
-            <template v-else>
-              <div v-if="item.type === 'upload'">
-                <!-- 展示附件列表 -->
-              </div>
-              <div v-else>
-                {{ issuesData[item.prop] }}
-              </div>
-            </template>
-          </el-form-item>
-        </template>
-      </el-form>
+      <AddWork v-if="pageStatus === 'add'" v-model="issuesData" />
+      <FillWork v-if="pageStatus === 'fill'" v-model="issuesData" />
+      <ProcessWork v-if="pageStatus === 'process'" :modelValue="issuesData" />
     </el-card>
   </div>
 </template>
-<!-- 
 
-注意后续迭代把form内的template做成组件+v-model 方便维护
-
- -->
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import {
-  CircleCheck,
-  Document,
-  ArrowLeftBold,
-  Paperclip,
-  User,
-} from "@element-plus/icons-vue";
+import { ArrowLeftBold } from "@element-plus/icons-vue";
 import useIssueWorkHead from "./hooks/useIssueWorkHead";
-import useIssueWorkBody from "./hooks/useIssueWorkBody";
+import AddWork from "./components/addWork.vue";
+import FillWork from "./components/fillWork.vue";
+import ProcessWork from "./components/processWork.vue";
 const router = useRouter();
-const { title, pageStatus, btnList } = useIssueWorkHead();
-const { issuesDataProps, issuesData } = useIssueWorkBody();
+const { title, pageStatus, btnList, id } = useIssueWorkHead();
+const issuesData = ref({
+  name: "",
+  level: "",
+  startTime: "",
+  endTime: "",
+  taskDescription: "",
+  fileList: [],
+  participant: [],
+});
 
-const save = () => {};
-const submit = () => {};
-onMounted(() => {});
+onMounted(() => {
+  if (id) {
+    // 查询数据
+  }
+});
 </script>
 <style lang="less" scoped>
 .container {
@@ -149,20 +82,6 @@ onMounted(() => {});
   }
   .panel {
     height: 75vh;
-    .el-input,
-    .el-select {
-      width: 300px;
-    }
-    .el-textarea {
-      width: 50%;
-    }
-    :deep(.el-date-editor.el-input, .el-date-editor.el-input__wrapper) {
-      width: 300px;
-      .el-input__wrapper {
-        box-sizing: border-box;
-        width: 100%;
-      }
-    }
   }
 }
 </style>

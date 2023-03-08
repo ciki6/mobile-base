@@ -5,17 +5,15 @@
     <van-image width="100%" :block="true" :src="profileImg" />
     <!-- </van-col> -->
     <router-view v-slot="{ Component, route }">
-      <keep-alive>
-        <suspense>
-          <template #default>
-            <component
-              :is="Component"
-              :key="route.meta.usePathKey ? route.path : undefined"
-            />
-          </template>
-          <template #fallback> Loading... </template>
-        </suspense>
-      </keep-alive>
+      <suspense>
+        <template #default>
+          <component
+            :is="Component"
+            :key="route.meta.usePathKey ? route.path : undefined"
+          />
+        </template>
+        <template #fallback> Loading... </template>
+      </suspense>
     </router-view>
     <van-tabbar v-model="active" :placeholder="true" route>
       <van-tabbar-item to="/purchase">
