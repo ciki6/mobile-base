@@ -1,9 +1,7 @@
 <template>
   <div id="layout-container">
-    <!-- <van-col span="24"> -->
     <van-image width="100%" :block="true" :src="headerImg" />
     <van-image width="100%" :block="true" :src="profileImg" />
-    <!-- </van-col> -->
     <router-view v-slot="{ Component, route }">
       <suspense>
         <template #default>
@@ -15,7 +13,7 @@
         <template #fallback> Loading... </template>
       </suspense>
     </router-view>
-    <van-tabbar v-model="active" :placeholder="true" route>
+    <van-tabbar v-model="active" placeholder route>
       <van-tabbar-item to="/purchase">
         <span>采购</span>
         <template #icon="props">
@@ -80,4 +78,14 @@ const iconList = [
   },
 ];
 </script>
-<style></style>
+<style lang="less" scoped>
+#layout-container {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  // display: flex;
+  // flex-direction: column;
+
+  // background-color: #fff;
+}
+</style>

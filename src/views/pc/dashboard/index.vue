@@ -127,10 +127,11 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import dataFilling from "../../../assets/icon/dashboard_dataFilling.png";
 import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
-import dataOverview from "../../../assets/icon/dashborad_dataOverview.png";
-import workIssueOverview from "../../../assets/icon/dashborad_workIssueOverview.png";
-import fillingProcess from "../../../assets/icon/dashborad_fillingProcess.png";
-
+import dataOverview from "../../../assets/icon/dashboard_dataOverview.png";
+import workIssueOverview from "../../../assets/icon/dashboard_workIssueOverview.png";
+import fillingProcess from "../../../assets/icon/dashboard_fillingProcess.png";
+import dataUpload from "../../../assets/icon/dashboard_dataUpload.png";
+import trackStatus from "../../../assets/icon/dashboard_trackStatus.png";
 const router = useRouter();
 
 const jumpChooseVisb = ref(false);
@@ -163,12 +164,12 @@ const enterList = [
   },
   {
     name: "在轨信息填报",
-    icon: dataFilling,
+    icon: trackStatus,
     path: "trackStatusFilling",
   },
   {
     name: "数据上传",
-    icon: dataFilling,
+    icon: dataUpload,
     feature: "upload",
     // path: "dataFilling",
   },
