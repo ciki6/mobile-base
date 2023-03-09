@@ -1,12 +1,14 @@
 <template>
-  <div class="subview-head">
-    <van-icon name="arrow-left" color="#fff" @click="router.go(-1)" />
-    <div class="head-middle">
-      <img class="head-title-icon" :src="props.headTitleIcon" alt="" />
-      <div class="title">{{ title }}</div>
+  <van-sticky>
+    <div class="subview-head">
+      <van-icon name="arrow-left" color="#fff" @click="router.go(-1)" />
+      <div class="head-middle">
+        <img class="head-title-icon" :src="props.headTitleIcon" alt="" />
+        <div class="title">{{ title }}</div>
+      </div>
+      <van-icon class="more-icon" name="ellipsis" color="#fff" />
     </div>
-    <van-icon class="more-icon" name="ellipsis" color="#fff" />
-  </div>
+  </van-sticky>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
