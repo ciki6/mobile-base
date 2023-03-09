@@ -35,6 +35,7 @@
           position="bottom"
           :lazy-render="false"
         >
+          <!--   :lazy-render="false" 一定要加 -->
           <van-picker
             v-model="selectedValues"
             :columns="currentOptions"
