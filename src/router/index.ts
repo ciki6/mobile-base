@@ -22,6 +22,19 @@ const moblieRoutes = [
           code: "dashboard",
         },
       },
+      {
+        path: "/dashboard-dataFilling",
+        name: "MobileDashboardDataFilling",
+        component: () =>
+          import("../views/mobile/dashboard/subviews/dataFilling/index.vue"),
+        meta: {
+          title: "数据填报",
+          icon: "home-outlined",
+          affix: true,
+          code: "dashboard-dataFilling",
+          hideTabBar: true,
+        },
+      },
     ],
   },
   {

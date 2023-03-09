@@ -1,6 +1,13 @@
 <template>
   <div class="container">
-    <div class="title"><van-icon name="chat-o" size="1.3rem" />工作台</div>
+    <div class="title">
+      <img
+        class="title-icon"
+        src="../../../assets/icon/dashboard-icon.png"
+        alt=""
+      />
+      工作台
+    </div>
 
     <div class="panel">
       <div class="panel-title">
@@ -18,7 +25,7 @@
         <van-grid-item
           v-for="item in quickEntranceData"
           :key="item.path"
-          :to="item.path"
+          :to="'/dashboard-' + item.path"
           :text="item.title"
         >
           <!-- @click="jump(item)" -->
@@ -125,37 +132,37 @@ const quickEntranceData = [
   {
     title: "数据填报",
     icon: dataFillingIcon,
-    path: "/dataFilling",
+    path: "dataFilling",
   },
   {
     title: "在轨信息填报",
     icon: trackStatus,
-    path: "/trackStatus",
+    path: "trackStatus",
   },
   {
     title: "数据上传",
     icon: dataUpload,
-    path: "/dataUpload",
+    path: "dataUpload",
   },
   {
     title: "工作下发",
     icon: issueWork,
-    path: "/issueWork",
+    path: "issueWork",
   },
   {
     title: "数据填报总览",
     icon: dataOverview,
-    path: "/dataOverview",
+    path: "dataOverview",
   },
   {
     title: "工作下发总览",
     icon: workIssueOverview,
-    path: "/workIssueOverview",
+    path: "workIssueOverview",
   },
   {
     title: "填报流程",
     icon: fillingProcess,
-    path: "/fillingProcess",
+    path: "fillingProcess",
   },
 ];
 
@@ -254,6 +261,10 @@ const dataInput = () => {};
     // font-family: "黑体";
     font-size: 1.3rem;
     margin: 0.5rem 0;
+    &-icon {
+      vertical-align: sub;
+      width: 1.8rem;
+    }
   }
   .panel + .panel {
     margin-top: 2%;

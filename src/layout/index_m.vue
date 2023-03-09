@@ -13,7 +13,7 @@
         <template #fallback> Loading... </template>
       </suspense>
     </router-view>
-    <van-tabbar v-model="active" placeholder route>
+    <van-tabbar v-if="showTab" v-model="active" placeholder route>
       <van-tabbar-item to="/purchase">
         <span>采购</span>
         <template #icon="props">
@@ -47,7 +47,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref } from "vue";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import headerImg from "../assets/icon/header.png";
 import purchaseIcon from "../assets/icon/tab_purchase.png";
 import profileImg from "../assets/icon/profile.png";
@@ -59,6 +60,10 @@ import transportationActiveIcon from "../assets/icon/tab_transportation_a.png";
 import salesActiveIcon from "../assets/icon/tab_sales_a.png";
 import dashboardActiveIcon from "../assets/icon/tab_dashboard_a.png";
 const active = ref(0);
+
+const route = useRoute();
+console.log(route, "====route");
+const showTab = computed(() => !route.meta.hideTabBar);
 const iconList = [
   {
     active: purchaseActiveIcon,

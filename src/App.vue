@@ -9,6 +9,7 @@
 <style scoped>
 .container {
   height: 100vh;
+  background-color: #ebebeb;
 }
 </style>
 <style>
