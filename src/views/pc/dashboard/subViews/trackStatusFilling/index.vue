@@ -5,30 +5,20 @@
         <el-icon class="title-icon" :size="20" @click="router.go(-1)"
           ><ArrowLeftBold
         /></el-icon>
-        <div class="title-text">数据填报</div>
+        <div class="title-text">在轨信息填报</div>
       </div>
       <div class="action-btns">
-        <template v-if="pageStatus === 'add'">
-          <el-button type="info" :icon="Document" round @click="save"
-            >保存</el-button
-          >
-          <el-button
-            type="primary"
-            :icon="CircleCheck"
-            round
-            @click="submit"
-            :disabled="newRows.some((item) => item.new)"
-            >提交</el-button
-          >
-        </template>
-        <template v-else>
-          <el-button type="info" :icon="CircleClose" round @click="reject"
-            >驳回</el-button
-          >
-          <el-button type="primary" :icon="CircleCheck" round @click="pass"
-            >提交</el-button
-          >
-        </template>
+        <el-button type="info" :icon="Document" round @click="save"
+          >保存</el-button
+        >
+        <el-button
+          type="primary"
+          :icon="CircleCheck"
+          round
+          @click="submit"
+          :disabled="newRows.some((item) => item.new)"
+          >提交</el-button
+        >
       </div>
     </div>
     <div class="panel">
@@ -51,47 +41,40 @@
                 align="center"
               >
                 <template v-slot="{ row, $index }">
-                  <div v-if="!row.new">{{ row[col.prop] }}</div>
+                  <el-select
+                    v-if="col.prop === 'trackStatus'"
+                    v-model="row.trackStatus"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in trackStatusOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  /></el-select>
+                  <div v-else-if="!row.new">{{ row[col.prop] }}</div>
                   <el-input v-else v-model="row[col.prop]" />
                 </template>
               </el-table-column>
+              <el-table-column label="操作" align="center">
+                <template v-slot="{ row }">
+                  <el-button
+                    v-if="row.id"
+                    type="primary"
+                    size="small"
+                    round
+                    @click="handleConfirmTrainOut(row)"
+                  >
+                    <!-- 确认过出站的数据 -->
+                    <!-- :disabled="row.xx" -->
+                    确认出站
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
-            <el-button
-              v-if="pageStatus === 'add'"
-              type="primary"
-              :icon="Plus"
-              round
-              @click="addPlan"
+            <el-button type="primary" :icon="Plus" round @click="addPlan"
               >新增行</el-button
             >
-            <el-button
-              v-else
-              type="primary"
-              :icon="Refresh"
-              round
-              @click="changePlan"
-              >变更</el-button
-            >
-          </div>
-        </el-card>
-        <el-card class="box-card">
-          <template #header>
-            <div class="card-header">
-              <span class="circle-primary"></span>
-              <span>操作日志</span>
-            </div>
-          </template>
-          <div class="list-card-body">
-            <el-table :data="recordTable" stripe style="width: 100%">
-              <el-table-column
-                v-for="col in recordTableColumn"
-                :prop="col.prop"
-                :label="col.label"
-                :key="col.prop"
-                show-overflow-tooltip
-                align="center"
-              />
-            </el-table>
           </div>
         </el-card>
       </el-scrollbar>
@@ -99,46 +82,39 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import {
   Plus,
   CircleCheck,
   Document,
   ArrowLeftBold,
-  CircleClose,
-  Refresh,
 } from "@element-plus/icons-vue";
 
 const router = useRouter();
-const currentRoute = useRoute();
-
-const pageStatus = computed(() => currentRoute.query.pageStatus);
-const planId = computed(() => currentRoute.query.id);
-
-onMounted(() => {
-  if (planId) {
-    // 查询数据 planTable recordTable
-  }
-});
+const trackStatusOptions = [
+  { label: "空车到站", value: 0 },
+  { label: "装车作业", value: 1 },
+  { label: "装车完毕", value: 2 },
+  { label: "重车出战", value: 3 },
+];
 // 表格data
 const planTableColumn = [
   { prop: "station", label: "站台" },
   { prop: "supplier", label: "供应商" },
-  { prop: "effectiveStock", label: "有效库存(吨)" },
-  { prop: "reportingPlan", label: "提报计划(列)" },
+  { prop: "trainNumber", label: "列车号" },
+  { prop: "trackStatus", label: "在轨信息" },
   { prop: "flow", label: "流向" },
   { prop: "user", label: "用户" },
   { prop: "coalType", label: "煤种" },
-  { prop: "contractType", label: "合同类型" },
 ];
 const planTable = ref<any>([
   {
     id: 1,
     station: "物资万1",
     supplier: "东辰",
-    effectiveStock: "900",
-    reportingPlan: "3",
+    trainNumber: "A800",
+    trackStatus: 0,
     flow: "区内外购",
     user: "XX电厂",
     coalType: "外购4500",
@@ -148,26 +124,12 @@ const planTable = ref<any>([
     id: 2,
     station: "物资万2",
     supplier: "东辰",
-    effectiveStock: "900",
-    reportingPlan: "3",
+    trainNumber: "A800",
+    trackStatus: 0,
     flow: "区内外购",
     user: "XX电厂",
     coalType: "外购4500",
     contractType: "长协",
-  },
-]);
-const recordTableColumn = [
-  { label: "操作", prop: "action" },
-  { label: "意见", prop: "suggestion" },
-  { label: "用户", prop: "user" },
-  { label: "时间", prop: "time" },
-];
-const recordTable = ref([
-  {
-    action: "提交审核",
-    suggestion: "xxx",
-    user: "李四",
-    time: "2023年2月20日 16:28:48",
   },
 ]);
 
@@ -195,15 +157,16 @@ const save = () => {
     delete item.new;
   });
 };
+
+const handleConfirmTrainOut = (row: any) => {
+  // 确认出站
+  console.log(row, "=======此数据 出站=======");
+};
+
 // 提交newRows
 const submit = () => {
   console.log(newRows.value, "======newRows");
 };
-
-// 审核函数
-const changePlan = () => {};
-const reject = () => {};
-const pass = () => {};
 </script>
 <style lang="less" scoped>
 .container {

@@ -58,19 +58,7 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <router-view v-slot="{ Component, route }">
-            <keep-alive>
-              <suspense>
-                <template #default>
-                  <component
-                    :is="Component"
-                    :key="route.meta.usePathKey ? route.path : undefined"
-                  />
-                </template>
-                <template #fallback> Loading... </template>
-              </suspense>
-            </keep-alive>
-          </router-view>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
