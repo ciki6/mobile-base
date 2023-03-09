@@ -24,24 +24,23 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, watch } from "vue";
+import { ref, defineProps, defineEmits, watch, computed } from "vue";
 import Editor from "./basicEditor.vue";
 
+const props = defineProps({
+  modelValue: { type: Object, required: true },
+});
 const emit = defineEmits(["update:modelValue"]);
 
-const issuesData = ref({
-  name: "",
-  level: "",
-  startTime: "",
-  endTime: "",
-  taskDescription: "",
-  fileList: [],
+const issuesData = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {},
 });
 
 watch(
-  () => {
-    return { ...issuesData.value };
-  },
+  issuesData,
   (val) => {
     emit("update:modelValue", val);
   },

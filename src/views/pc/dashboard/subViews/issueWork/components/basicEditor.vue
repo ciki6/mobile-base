@@ -32,13 +32,14 @@ import {
   defineProps,
   defineEmits,
   watch,
+  computed,
 } from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 // import { DomEditor } from "@wangeditor/editor";
 
-// const props = defineProps({
-//   modelValue: String,
-// });
+const props = defineProps({
+  modelValue: { type: String, required: true },
+});
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -47,17 +48,13 @@ const mode = "default";
 const editorRef = shallowRef();
 
 // 内容 HTML
-const valueHtml = ref("");
-
-// 模拟 ajax 异步获取内容
-onMounted(() => {
-  // setTimeout(() => {
-  //   valueHtml.value = "<p>模拟 Ajax 异步设置内容</p>";
-  // }, 1500);
-});
-
-watch(valueHtml, (newValue) => {
-  emit("update:modelValue", newValue);
+const valueHtml = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  },
 });
 
 const toolbarConfig = {
