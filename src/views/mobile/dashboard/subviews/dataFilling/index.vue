@@ -26,6 +26,7 @@
               :columns="colItem.options"
               :label="colItem.label"
               :name="colItem.prop"
+              label-width="7rem"
             />
           </template>
         </van-cell-group>

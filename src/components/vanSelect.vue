@@ -6,8 +6,11 @@
       :name="name"
       :rules="rules"
       :label-width="labelWidth"
+      :label-align="labelAlign"
+      :input-align="inputAlign"
       is-link
       readonly
+      arrow-direction="down"
       @click="popShow = !popShow"
     >
     </van-field>
@@ -27,11 +30,12 @@ import { nextTick, onMounted, ref, watch, defineProps, defineEmits } from "vue";
 const props = defineProps({
   modelValue: { type: String, default: "", required: true },
   columns: { type: Array, default: [] },
-  valueKey: { type: String, default: "text" },
   name: { type: String, default: "" },
   rules: { type: Array, default: [] },
-  labelWidth: { type: String, default: "7rem" },
+  labelWidth: { type: String, default: "" },
   label: { type: String, default: "" },
+  labelAlign: { type: String, default: "left" },
+  inputAlign: { type: String, default: "left" },
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -65,6 +69,7 @@ const reShow = () => {
 watch(selectedValue, (newVal, oldVal) => {
   emit("update:modelValue", newVal);
 });
+
 watch(
   () => props.columns,
   (newVal, oldVal) => {
@@ -100,7 +105,11 @@ watch(
   :deep(.van-cell__right-icon) {
     position: absolute;
     right: 1.2rem;
-    transform: rotate(90deg);
+  }
+}
+.van-field--label-top {
+  :deep(.van-cell__right-icon) {
+    top: 2.5rem;
   }
 }
 </style>

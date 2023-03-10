@@ -26,6 +26,7 @@
               :columns="colItem.options"
               :label="colItem.label"
               :name="colItem.prop"
+              label-width="7rem"
             />
             <van-field
               v-else-if="colItem.type === 'button'"

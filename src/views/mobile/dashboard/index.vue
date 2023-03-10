@@ -147,7 +147,7 @@ const quickEntranceData = [
   {
     title: "工作下发",
     icon: issueWork,
-    path: "issueWork",
+    path: "createTask",
   },
   {
     title: "数据填报总览",

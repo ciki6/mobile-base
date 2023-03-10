@@ -50,6 +50,19 @@ const moblieRoutes = [
           hideTabBar: true,
         },
       },
+      {
+        path: "/dashboard-createTask",
+        name: "MobileDashboardCreateTask",
+        component: () =>
+          import("../views/mobile/dashboard/subviews/createTask/index.vue"),
+        meta: {
+          title: "工作下发",
+          icon: "home-outlined",
+          affix: true,
+          code: "dashboard-createTask",
+          hideTabBar: true,
+        },
+      },
     ],
   },
   {
