@@ -35,6 +35,21 @@ const moblieRoutes = [
           hideTabBar: true,
         },
       },
+      {
+        path: "/dashboard-trackStatusFilling",
+        name: "MobileDashboardTrackStatusFilling",
+        component: () =>
+          import(
+            "../views/mobile/dashboard/subviews/trackStatusFilling/index.vue"
+          ),
+        meta: {
+          title: "在轨信息填报",
+          icon: "home-outlined",
+          affix: true,
+          code: "dashboard-trackStatusFilling",
+          hideTabBar: true,
+        },
+      },
     ],
   },
   {

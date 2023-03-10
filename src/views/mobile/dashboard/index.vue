@@ -137,7 +137,7 @@ const quickEntranceData = [
   {
     title: "在轨信息填报",
     icon: trackStatus,
-    path: "trackStatus",
+    path: "trackStatusFilling",
   },
   {
     title: "数据上传",
