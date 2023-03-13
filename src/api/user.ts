@@ -8,8 +8,18 @@ export async function getUserList<T>() {
   });
 }
 
-export async function getUserInfoFromICE<T>() {
-  return fetch(config.ICEURL).then((res: Response) => {
+export async function getUserInfoFromICE<T>(apptoken: string) {
+  return fetch(config.ICEURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      apptoken,
+      appid: config.ICEAPPID,
+      oauth: 0,
+    }),
+  }).then((res: Response) => {
     return res.json();
   });
 }
