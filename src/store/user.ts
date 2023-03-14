@@ -1,23 +1,26 @@
-import { defineStore } from 'pinia';
-import { ElMessage } from 'element-plus';
-import { getUserInfoFromICE } from '../api/user';
+import { defineStore } from "pinia";
+import { ElMessage } from "element-plus";
+import { getUserInfoFromICE, getUserInfoFromICEMock } from "../api/user";
 
-export const userStore = defineStore('user', {
+export const userStore = defineStore("user", {
   state: () => {
     return {
-      id: '',
-      username: '',
+      userId: "",
+      username: "",
     };
   },
   actions: {
     async login(apptoken: string) {
-      const { data, ret } = await getUserInfoFromICE(apptoken);
-      if (ret !== 0) {
+      const { data, ret } = await getUserInfoFromICEMock(apptoken);
+      console.log(data, ret);
+      if (ret === 0 || ret === "0") {
+        const username = data?.username;
+        this.username = username;
+        this.userId = data?.employee_num ?? "";
+      } else {
         ElMessage.error(`调用ICE登录接口失败`);
-        return Promise.reject('error');
+        return Promise.reject("error");
       }
-      const username = data?.username;
-      this.username = username;
     },
   },
 });

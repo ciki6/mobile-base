@@ -4,6 +4,6 @@ declare module "*.vue" {
 }
 
 declare module "d3";
-
+// declare module "*.ts";
 declare module "@wangeditor/editor-for-vue";
 declare module "@wangeditor/editor";

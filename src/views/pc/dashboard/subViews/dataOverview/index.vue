@@ -13,11 +13,15 @@
         <el-col :span="20" class="search-items">
           <div class="search-item">
             <div class="label">编号：</div>
-            <el-input v-model="searchQuery.number" placeholder="请输入编号" />
+            <el-input v-model="searchQuery.fillName" placeholder="请输入编号" />
           </div>
           <div class="search-item">
             <div class="label">状态：</div>
-            <el-select v-model="searchQuery.status" placeholder="请选择">
+            <el-select
+              v-model="searchQuery.status"
+              placeholder="请选择"
+              clearable
+            >
               <el-option
                 v-for="item in statusOptions"
                 :key="item.value"
@@ -50,7 +54,12 @@
         type="primary"
         :icon="Plus"
         round
-        @click="router.push('dashboard-dataFilling')"
+        @click="
+          router.push({
+            path: '/dashboard-dataFilling',
+            query: { pageStatus: 'add' },
+          })
+        "
       >
         新增计划
       </el-button>
@@ -60,47 +69,52 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-
+import { getAllJoinFillDataByUserId } from "@/api/dashboard";
 import {
   Search,
   ArrowLeftBold,
   RefreshRight,
   Plus,
 } from "@element-plus/icons-vue";
+import moment from "moment";
 
 const router = useRouter();
 const statusOptions = [
-  { label: "1", value: 1 },
-  { label: "2", value: 2 },
+  { label: "未提交", value: "未提交" },
+  { label: "待审核", value: "待审核" },
+  { label: "已完成", value: "已完成" },
+  { label: "已驳回", value: "已驳回" },
 ];
-const searchQuery = ref({ number: "", status: "" });
+const searchQuery = ref({ fillName: "", status: "" });
 
-// 表格data
+// 表格
 const planTableColumn = [
   { prop: "index", label: "序号" },
-  { prop: "number", label: "编号" },
-  { prop: "createPerson", label: "创建人" },
+  { prop: "fillName", label: "编号" },
+  { prop: "createBy", label: "创建人" },
   { prop: "createTime", label: "创建时间" },
   { prop: "actingOperator", label: "代操作人" },
   { prop: "status", label: "状态" },
 ];
-const planTable = ref<any>([
-  {
-    index: 1,
-    number: "监装站计划提报单2023/2/20",
-    createPerson: "李四",
-    createTime: "2023年2月20日 16：28：48",
-    actingOperator: "  ",
-    status: "未提交",
-  },
-]);
+const planTable = ref<any[]>([]);
 
-const search = () => {};
+const search = () => {
+  getAllJoinFillDataByUserId(searchQuery.value).then((res: any) => {
+    console.log(res, "====res");
+    planTable.value = res.data.map((item: any, index: number) => {
+      item.index = index + 1;
+      item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+      return item;
+    });
+  });
+};
 const reset = () => {
-  searchQuery.value = { number: "", status: "" };
+  searchQuery.value = { fillName: "", status: "" };
 };
 
-onMounted(() => {});
+onMounted(() => {
+  search();
+});
 </script>
 <style lang="less" scoped>
 .container {

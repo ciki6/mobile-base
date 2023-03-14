@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <el-container>
-      <el-header :height="'100px'">
+      <el-header :height="'100px'" style="background-color: #fff">
         <div class="header-container">
           <el-image :src="headerImg" />
           <div>多云</div>
@@ -16,6 +16,7 @@
             class="el-menu-vertical-demo"
             @select="handleSelect"
             :router="true"
+            style="width: 100%; height: 100%"
           >
             <el-menu-item index="purchase">
               <img
@@ -57,7 +58,7 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>
+        <el-main style="background-color: rgb(230, 229, 233)">
           <router-view />
         </el-main>
       </el-container>

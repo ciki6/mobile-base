@@ -9,16 +9,35 @@
       </div>
     </div>
     <el-card class="panel">
-      <!-- <el-scrollbar height="710px" style="width: 1400px"> -->
       <svg width="100%" height="100%"></svg>
-      <!-- </el-scrollbar> -->
     </el-card>
     <el-dialog
       v-model="choosePeopleVisb"
       :title="choosePeopleTitle"
       :close-on-click-modal="false"
+      width="20vw"
       @close="handleDialogClose"
-    ></el-dialog>
+    >
+      <el-scrollbar height="400px">
+        <div class="checkbox-group">
+          <el-checkbox
+            v-for="item in (personList as any[])"
+            v-model="item.pick"
+            :label="item.userName"
+            size="large"
+          />
+        </div>
+      </el-scrollbar>
+      <template #footer>
+        <el-button
+          v-if="personList.length > 0"
+          type="primary"
+          @click="confirmChoose"
+        >
+          确认
+        </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -27,10 +46,24 @@ import { ArrowLeftBold } from "@element-plus/icons-vue";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useDrawProcess } from "./useDrawProcess";
+import { saveDataFillUserNode } from "@/api/dashboard";
 const router = useRouter();
 
-const { choosePeopleVisb, choosePeopleTitle } = useDrawProcess();
-
+const { choosePeopleVisb, choosePeopleTitle, personList, currentNodeId } =
+  useDrawProcess();
+const confirmChoose = () => {
+  console.log(personList.value, "===confirmChoose");
+  const data = {
+    nodeId: currentNodeId.value,
+    userId: personList.value
+      .filter((item: any) => item.pick)
+      .map((item: any) => item.userId)
+      .join(","),
+  };
+  saveDataFillUserNode(data).then((res: any) => {
+    console.log(res);
+  });
+};
 const handleDialogClose = () => {
   // 清空树选择
 };
@@ -68,5 +101,11 @@ const handleDialogClose = () => {
       padding: 0;
     }
   }
+}
+.checkbox-group {
+  padding: 0 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

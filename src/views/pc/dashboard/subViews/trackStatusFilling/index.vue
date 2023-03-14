@@ -11,12 +11,7 @@
         <el-button type="info" :icon="Document" round @click="save"
           >保存</el-button
         >
-        <el-button
-          type="primary"
-          :icon="CircleCheck"
-          round
-          @click="submit"
-          :disabled="newRows.some((item) => item.new)"
+        <el-button type="primary" :icon="CircleCheck" round @click="submit"
           >提交</el-button
         >
       </div>
@@ -108,33 +103,8 @@ const planTableColumn = [
   { prop: "user", label: "用户" },
   { prop: "coalType", label: "煤种" },
 ];
-const planTable = ref<any>([
-  {
-    id: 1,
-    station: "物资万1",
-    supplier: "东辰",
-    trainNumber: "A800",
-    trackStatus: 0,
-    flow: "区内外购",
-    user: "XX电厂",
-    coalType: "外购4500",
-    contractType: "长协",
-  },
-  {
-    id: 2,
-    station: "物资万2",
-    supplier: "东辰",
-    trainNumber: "A800",
-    trackStatus: 0,
-    flow: "区内外购",
-    user: "XX电厂",
-    coalType: "外购4500",
-    contractType: "长协",
-  },
-]);
+const planTable = ref<any>([]);
 
-// 新数据
-const newRows = ref<any[]>([]);
 const addPlan = () => {
   const newRow = {
     new: true,
@@ -147,16 +117,11 @@ const addPlan = () => {
     coalType: "",
     contractType: "",
   };
-  newRows.value.push(newRow);
   planTable.value.push(newRow);
 };
 
 // 前端保存 new判断 必填项校验
-const save = () => {
-  newRows.value.forEach((item) => {
-    delete item.new;
-  });
-};
+const save = () => {};
 
 const handleConfirmTrainOut = (row: any) => {
   // 确认出站
@@ -165,7 +130,7 @@ const handleConfirmTrainOut = (row: any) => {
 
 // 提交newRows
 const submit = () => {
-  console.log(newRows.value, "======newRows");
+  // console.log(newRows.value, "======newRows");
 };
 </script>
 <style lang="less" scoped>

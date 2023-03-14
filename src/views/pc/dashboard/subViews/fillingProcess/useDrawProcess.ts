@@ -1,9 +1,11 @@
 import { ref, onMounted } from "vue";
 import * as d3 from "d3";
+import { getAllFillUsersByDepartMent } from "@/api/dashboard";
 
-export const useDrawProcess = (apiFuncs?: Function[]) => {
+export const useDrawProcess = () => {
   const choosePeopleTitle = ref("");
   const choosePeopleVisb = ref(false);
+  const personList = ref([]);
   const department = [
     { label: "外购煤监装站", column: 1 },
     { label: "采购业务部", column: 2 },
@@ -11,14 +13,20 @@ export const useDrawProcess = (apiFuncs?: Function[]) => {
   ];
 
   const nodeData = [
-    { label: "数据填报人员", column: 1, row: 1, key: "111" },
-    { label: "站负责人（数据审核人员）", column: 1, row: 3, key: "222" },
-    { label: "客户经理", column: 2, row: 1 },
-    { label: "部门负责人", column: 2, row: 2 },
-    { label: "分管领导", column: 2, row: 3 },
-    { label: "调度主管", column: 3, row: 1 },
-    { label: "部门负责人", column: 3, row: 2 },
-    { label: "分管领导", column: 3, row: 3 },
+    { label: "数据填报人员", column: 1, row: 1, key: "111", nodeId: 1 },
+    {
+      label: "站负责人（数据审核人员）",
+      column: 1,
+      row: 3,
+      key: "222",
+      nodeId: 2,
+    },
+    { label: "客户经理", column: 2, row: 1, nodeId: 3 },
+    { label: "部门负责人", column: 2, row: 2, nodeId: 4 },
+    { label: "分管领导", column: 2, row: 3, nodeId: 5 },
+    { label: "调度主管", column: 3, row: 1, nodeId: 6 },
+    { label: "部门负责人", column: 3, row: 2, nodeId: 7 },
+    { label: "分管领导", column: 3, row: 3, nodeId: 8 },
   ];
 
   const lines = [
@@ -298,28 +306,33 @@ export const useDrawProcess = (apiFuncs?: Function[]) => {
     });
   };
 
+  const currentNodeId = ref(0);
   const bindChoose = () => {
     d3.selectAll(".node").on("click", (e: any, d: any) => {
       // 覆盖树选择
       choosePeopleTitle.value = `选择${d.label}`;
-      choosePeopleVisb.value = true;
+      const deptName =
+        department.find((item) => item.column === d.column)?.label ?? "";
+
+      getAllFillUsersByDepartMent({ deptName, nodeId: d.nodeId }).then(
+        (res: any) => {
+          console.log(res, "======getAllFillUsersByDepartMent res");
+          currentNodeId.value = d.nodeId;
+          personList.value = res.data;
+          choosePeopleVisb.value = true;
+        }
+      );
     });
   };
   onMounted(() => {
-    if (apiFuncs) {
-      new (Promise.all(apiFuncs) as any).then((res: any) => {
-        // 合并 nodeData
-        draw();
-        bindChoose();
-      });
-    } else {
-      draw();
-      bindChoose();
-    }
+    draw();
+    bindChoose();
   });
 
   return {
     choosePeopleTitle,
     choosePeopleVisb,
+    personList,
+    currentNodeId,
   };
 };

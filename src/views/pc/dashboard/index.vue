@@ -22,7 +22,7 @@
           </div>
         </el-card>
       </div>
-      <div class="panel">
+      <div v-if="data2CheckList.length > 0" class="panel">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -31,27 +31,27 @@
           </template>
           <div class="list-card-body">
             <div
-              v-for="o in dataCheck"
-              :key="o.id"
+              v-for="o in (data2CheckList as any)"
+              :key="o.fillCode"
               class="list-item"
               @click="
                 jump({
                   path: 'dataFilling',
-                  query: { id: o.id, pageStatus: 'process' },
+                  query: { fillCode: o.fillCode, pageStatus: 'process' },
                 })
               "
             >
               <el-row>
-                <el-col :span="18">{{ o.title }}</el-col>
-                <el-col :span="3">{{ o.user }}</el-col>
-                <el-col :span="3">{{ o.date }}</el-col>
+                <el-col :span="18">{{ o.fillName }}</el-col>
+                <el-col :span="3">{{ o.userName }}</el-col>
+                <el-col :span="3">{{ o.createTime }}</el-col>
               </el-row>
               <el-divider />
             </div>
           </div>
         </el-card>
       </div>
-      <div class="panel">
+      <div v-if="data2CheckList.length > 0" class="panel">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -60,27 +60,27 @@
           </template>
           <div class="list-card-body">
             <div
-              v-for="o in dataCheck"
-              :key="o.id"
+              v-for="o in (data2CheckList as any)"
+              :key="o.fillCode"
               class="list-item"
               @click="
                 jump({
                   path: 'issueWork',
-                  query: { id: o.id, pageStatus: 'fill' },
+                  query: { fillCode: o.fillCode, pageStatus: 'fill' },
                 })
               "
             >
               <el-row>
-                <el-col :span="18">{{ o.title }}</el-col>
-                <el-col :span="3">{{ o.user }}</el-col>
-                <el-col :span="3">{{ o.date }}</el-col>
+                <el-col :span="18">{{ o.fillName }}</el-col>
+                <el-col :span="3">{{ o.userName }}</el-col>
+                <el-col :span="3">{{ o.createTime }}</el-col>
               </el-row>
               <el-divider />
             </div>
           </div>
         </el-card>
       </div>
-      <div class="panel">
+      <div v-if="data2CheckList.length > 0" class="panel">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -89,13 +89,13 @@
           </template>
           <div class="list-card-body">
             <div
-              v-for="o in dataCheck"
-              :key="o.id"
+              v-for="o in (data2CheckList as any)"
+              :key="o.fillCode"
               class="list-item"
               @click="
                 jump({
                   path: 'issueWork',
-                  query: { id: o.id, pageStatus: 'process' },
+                  query: { fillCode: o.fillCode, pageStatus: 'process' },
                 })
               "
             >
@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import dataFilling from "../../../assets/icon/dashboard_dataFilling.png";
 import IssueWork from "../../../assets/icon/dashboard_issueWork.png";
@@ -132,6 +132,12 @@ import workIssueOverview from "../../../assets/icon/dashboard_workIssueOverview.
 import fillingProcess from "../../../assets/icon/dashboard_fillingProcess.png";
 import dataUpload from "../../../assets/icon/dashboard_dataUpload.png";
 import trackStatus from "../../../assets/icon/dashboard_trackStatus.png";
+import moment from "moment";
+import {
+  getAllMenuByUserId,
+  getAllFillDataByUserId,
+} from "../../../api/dashboard";
+
 const router = useRouter();
 
 const jumpChooseVisb = ref(false);
@@ -195,26 +201,17 @@ const enterList = [
     path: "fillingProcess",
   },
 ];
-const dataCheck = [
-  {
-    id: 1,
-    title: "建装站计划提报单1",
-    user: "李四",
-    date: "2023年2月20日",
-  },
-  {
-    id: 2,
-    title: "建装站计划提报单2",
-    user: "李四",
-    date: "2023年2月20日",
-  },
-  {
-    id: 3,
-    title: "建装站计划提报单3",
-    user: "李四",
-    date: "2023年2月20日",
-  },
-];
+const data2CheckList = ref([]);
+
+onMounted(() => {
+  getAllMenuByUserId().then((res: any) => {});
+  getAllFillDataByUserId().then((res: any) => {
+    data2CheckList.value = res.data.map((item: any) => {
+      item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+      return item;
+    });
+  });
+});
 </script>
 
 <style scoped>
@@ -264,5 +261,6 @@ const dataCheck = [
 }
 .list-item {
   cursor: pointer;
+  padding-left: 20px;
 }
 </style>
