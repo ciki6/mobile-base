@@ -27,11 +27,7 @@
           >
         </template>
         <template v-else>
-          <el-button
-            type="info"
-            :icon="CircleClose"
-            round
-            @click="saveSubmit('reject')"
+          <el-button type="info" :icon="CircleClose" round @click="reject"
             >驳回</el-button
           >
           <el-button
@@ -356,7 +352,9 @@ const saveSubmit = (type: string) => {
         operation: pageInfo.operation,
         opinion: pageInfo.opinion,
       }).then((res: any) => {
-        console.log(res, "======rejectFillData");
+        opinionDialogVisb.value = false;
+        ElMessage.success("审批成功");
+        router.go(-1);
       });
     }
   });
@@ -377,7 +375,14 @@ const changePlan = () => {
     changePlanStatus.value = true;
   }
 };
+// 驳回
+const reject = () => {
+  pageInfo.opinion = "";
+  opinionDialogTitle.value = "请填写驳回理由";
+  opinionDialogVisb.value = true;
+};
 
+// 意见弹窗confirm
 const dialogConfirm = () => {
   if (changePlanStatus.value) {
     saveSubmit("changePlan");

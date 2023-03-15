@@ -51,7 +51,7 @@
           </div>
         </el-card>
       </div>
-      <div v-if="data2CheckList.length > 0" class="panel">
+      <div v-if="waitCompleteList.length > 0" class="panel">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -60,27 +60,27 @@
           </template>
           <div class="list-card-body">
             <div
-              v-for="o in (data2CheckList as any)"
-              :key="o.fillCode"
+              v-for="o in (waitCompleteList as any)"
+              :key="o.distId"
               class="list-item"
               @click="
                 jump({
                   path: 'issueWork',
-                  query: { fillCode: o.fillCode, pageStatus: 'fill' },
+                  query: { distId: o.distId, pageStatus: 'fill' },
                 })
               "
             >
               <el-row>
-                <el-col :span="18">{{ o.fillName }}</el-col>
+                <el-col :span="18">{{ o.name }}</el-col>
                 <el-col :span="3">{{ o.userName }}</el-col>
-                <el-col :span="3">{{ o.createTime }}</el-col>
+                <el-col :span="3">{{ o.startTime }}</el-col>
               </el-row>
               <el-divider />
             </div>
           </div>
         </el-card>
       </div>
-      <div v-if="data2CheckList.length > 0" class="panel">
+      <div v-if="verifyList.length > 0" class="panel">
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -89,20 +89,20 @@
           </template>
           <div class="list-card-body">
             <div
-              v-for="o in (data2CheckList as any)"
-              :key="o.fillCode"
+              v-for="o in (verifyList as any)"
+              :key="o.distId"
               class="list-item"
               @click="
                 jump({
                   path: 'issueWork',
-                  query: { fillCode: o.fillCode, pageStatus: 'process' },
+                  query: { distId: o.distId, pageStatus: 'process' },
                 })
               "
             >
               <el-row>
-                <el-col :span="18">{{ o.title }}</el-col>
-                <el-col :span="3">{{ o.user }}</el-col>
-                <el-col :span="3">{{ o.date }}</el-col>
+                <el-col :span="18">{{ o.name }}</el-col>
+                <el-col :span="3">{{ o.userName }}</el-col>
+                <el-col :span="3">{{ o.startTime }}</el-col>
               </el-row>
               <el-divider />
             </div>
@@ -120,6 +120,7 @@
       在轨信息填报
     </div>
   </el-dialog>
+  <UploadDialog v-model:visible="uploadDialogVisb" accept=".xls,.xlsx" />
 </template>
 
 <script lang="ts" setup>
@@ -136,9 +137,12 @@ import moment from "moment";
 import {
   getAllMenuByUserId,
   getAllFillDataByUserId,
-} from "../../../api/dashboard";
-
+  findWorkDistributeFlowByUserId,
+} from "@/api/dashboard";
+import UploadDialog from "./components/dataFill-upload-dialog.vue";
 const router = useRouter();
+
+const uploadDialogVisb = ref(false);
 
 const jumpChooseVisb = ref(false);
 const jump = (enterObject: any) => {
@@ -152,6 +156,7 @@ const jump = (enterObject: any) => {
     switch (enterObject.feature) {
       case "upload":
         console.log("=====upload=====");
+        uploadDialogVisb.value = true;
         break;
       case "overview":
         jumpChooseVisb.value = true;
@@ -161,6 +166,7 @@ const jump = (enterObject: any) => {
     }
   }
 };
+// 快捷入口
 const enterList = [
   {
     name: "数据填报",
@@ -201,13 +207,25 @@ const enterList = [
     path: "fillingProcess",
   },
 ];
-const data2CheckList = ref([]);
-
+const data2CheckList = ref([]); // 数据审核列表
+const verifyList = ref([]); // 工作下发-待审核列表
+const waitCompleteList = ref([]); // 工作下发-待完成列表
 onMounted(() => {
   getAllMenuByUserId().then((res: any) => {});
   getAllFillDataByUserId().then((res: any) => {
     data2CheckList.value = res.data.map((item: any) => {
       item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+      return item;
+    });
+  });
+  findWorkDistributeFlowByUserId().then((res: any) => {
+    console.log(res, "======findWorkDistributeFlowByUserId");
+    waitCompleteList.value = (res.data?.waitComplete || []).map((item: any) => {
+      item.startTime = moment(item.startTime).format("YYYY-MM-DD HH:mm:ss");
+      return item;
+    });
+    verifyList.value = (res.data?.verify || []).map((item: any) => {
+      item.startTime = moment(item.startTime).format("YYYY-MM-DD HH:mm:ss");
       return item;
     });
   });

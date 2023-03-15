@@ -40,15 +40,28 @@
         </el-col>
       </el-row>
       <el-table :data="planTable" max-height="55vh" stripe style="width: 100%">
-        <el-table-column
-          v-for="col in planTableColumn"
-          :prop="col.prop"
-          :label="col.label"
-          :key="col.prop"
-          align="center"
-          show-overflow-tooltip
-        >
-        </el-table-column>
+        <template v-for="col in (planTableColumn as any)" :key="col.prop">
+          <el-table-column
+            v-if="col.prop === 'fillName'"
+            :prop="col.prop"
+            :label="col.label"
+            align="center"
+            show-overflow-tooltip
+            width="300"
+          >
+            <template v-slot="{ row }">
+              <div @click="goDetail(row)">{{ row[col.prop] }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-else
+            :prop="col.prop"
+            :label="col.label"
+            align="center"
+            show-overflow-tooltip
+          >
+          </el-table-column>
+        </template>
       </el-table>
       <el-button
         type="primary"
@@ -112,6 +125,10 @@ const reset = () => {
   searchQuery.value = { fillName: "", status: "" };
 };
 
+const goDetail = (row: any) => {
+  console.log(row);
+  // if(row.)
+};
 onMounted(() => {
   search();
 });

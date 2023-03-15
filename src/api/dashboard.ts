@@ -108,3 +108,31 @@ export const saveDataFillUserNode = (data: any) => {
     data: { userNodes: data, userId: userStoreState.userId },
   });
 };
+
+// 获取当前用户待完成和待审核的工作下发任务
+export const findWorkDistributeFlowByUserId = () => {
+  return request({
+    url: "/work/findWorkDistributeFlowByUserId",
+    method: "get",
+    params: { userId: userStoreState.userId },
+  });
+};
+
+// 获取数据上传的模板类型下拉框字典
+export const getAlITemplateData = () => {
+  return request({
+    url: "/upLoad/getAllTemplateData",
+    method: "get",
+  });
+};
+// 上传excel数据填报文件
+export const uploadAndParseExcelFile = (data: any) => {
+  return request({
+    headers: {
+      "Content-Type": "multipart/form-data", // 传递图片 headers 里得这样写
+    },
+    url: `/upLoad/uploadAndParseExcelFile`,
+    method: "post",
+    data,
+  });
+};
