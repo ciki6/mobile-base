@@ -17,12 +17,11 @@ const handleCode = (code: number, msg: string) => {
 };
 const service: any = axios.create({
   timeout,
-  baseURL: import.meta.env.VITE_HOST,
+  baseURL: import.meta.env.VUE_APP_API_HOST,
   headers: {
     "Content-Type": contentType,
   },
 });
-console.log(import.meta.env, "====import.meta.env");
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // const user_store = userStore();
