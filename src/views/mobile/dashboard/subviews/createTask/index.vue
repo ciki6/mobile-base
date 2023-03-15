@@ -86,7 +86,7 @@ const fillingData = ref<any>({
   startTime: ["2022", "03", "01"],
   endTime: ["2022", "03", "02"],
 });
-const formProps = [
+const formProps: any = [
   {
     prop: "taskName",
     label: "任务名称",

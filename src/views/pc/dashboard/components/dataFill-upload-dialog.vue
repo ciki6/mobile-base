@@ -103,7 +103,7 @@ const uploadFiles = () => {
       const _file = item.raw;
       let formData = new FormData();
       formData.append("file", _file);
-      formData.append("type", "CoalContractInfo");
+      formData.append("type", templateType.value);
       return uploadAndParseExcelFile(formData);
     })
   )
@@ -112,13 +112,17 @@ const uploadFiles = () => {
       const indexArr: number[] = [];
       resArr.forEach((item: any, index: number) => {
         if (item.code != 200) {
-          indexArr.push(index);
+          indexArr.push(index + 1);
         }
       });
       if (indexArr.length) {
-        ElMessage.error(
-          `第${indexArr.join(",")}个文件上传失败，其余文件已上传成功`
-        );
+        if (indexArr.length > 1) {
+          ElMessage.error(
+            `第${indexArr.join(",")}个文件上传失败，其余文件已上传成功`
+          );
+        } else {
+          ElMessage.error("上传失败");
+        }
       } else {
         ElMessage.success("上传成功！");
         fileList.value = [];

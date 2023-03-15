@@ -11,6 +11,7 @@ export const userStore = defineStore("user", {
   },
   actions: {
     async login(apptoken: string) {
+      // const { data, ret } = await getUserInfoFromICE(apptoken);
       const { data, ret } = await getUserInfoFromICEMock(apptoken);
       console.log(data, ret);
       if (ret === 0 || ret === "0") {

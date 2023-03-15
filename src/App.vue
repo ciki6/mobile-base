@@ -13,7 +13,7 @@ if (params.get("apptoken") !== null) {
 user_store
   .login(apptoken)
   .then(() => {
-    // router.push('/dashboard')
+    router.push("/dashboard");
   })
   .catch((d) => {
     console.log(d);
