@@ -17,7 +17,7 @@ const handleCode = (code: number, msg: string) => {
 };
 const service: any = axios.create({
   timeout,
-  baseURL: import.meta.env.VUE_APP_API_HOST,
+  baseURL: import.meta.env.VITE_HOST,
   headers: {
     "Content-Type": contentType,
   },
