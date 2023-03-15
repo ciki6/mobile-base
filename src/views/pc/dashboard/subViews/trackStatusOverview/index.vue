@@ -68,7 +68,6 @@ const planTableColumn = [
   { prop: "number", label: "编号" },
   { prop: "createPerson", label: "创建人" },
   { prop: "createTime", label: "创建日期" },
-  { prop: "actingOperator", label: "代操作人" },
 ];
 interface tableRowProps {
   index: number;

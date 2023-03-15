@@ -2,11 +2,7 @@
   <SubViewsHead :head-title-icon="titleIcon" />
   <div class="dashboard-container">
     <div class="data-title">
-      <img
-        class="title-icon"
-        src="src/assets/icon/dataProcessIcon.png"
-        alt=""
-      />
+      <img class="title-icon" src="@/assets/icon/dataProcessIcon.png" alt="" />
       <div class="title-text">监装站计划提报单-{{ date }}</div>
     </div>
     <div class="filling-part">

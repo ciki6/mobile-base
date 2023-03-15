@@ -21,7 +21,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': resolve('src'), //作为 entries 的选项
+      '@': path.resolve(__dirname, 'src'), //作为 entries 的选项
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },

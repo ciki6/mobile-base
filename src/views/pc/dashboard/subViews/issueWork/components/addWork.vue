@@ -19,8 +19,8 @@
     <el-form-item label="结束时间：" prop="endTime">
       <el-date-picker v-model="issuesData.endTime" type="datetime" />
     </el-form-item>
-    <el-form-item label="任务描述：" prop="taskDescription">
-      <Editor v-model="issuesData.taskDescription" />
+    <el-form-item label="任务描述：" prop="description">
+      <Editor v-model="issuesData.description" />
     </el-form-item>
     <el-form-item label="插入附件：" prop="fileList">
       <el-upload
@@ -66,7 +66,7 @@ const issuesData = ref({
   level: "",
   startTime: "",
   endTime: "",
-  taskDescription: "",
+  description: "",
   fileList: [],
   participant: [],
 });

@@ -5,19 +5,24 @@
         <el-icon class="title-icon" :size="20" @click="router.go(-1)"
           ><ArrowLeftBold
         /></el-icon>
-        <div class="title-text">数据填报</div>
+        <div class="title-text">
+          数据填报{{ pageStatus === "process" ? "审核" : "" }}
+        </div>
       </div>
       <div class="action-btns">
         <template v-if="pageStatus === 'add'">
-          <el-button type="info" :icon="Document" round @click="save"
+          <el-button
+            type="info"
+            :icon="Document"
+            round
+            @click="saveSubmit('save')"
             >保存</el-button
           >
           <el-button
             type="primary"
             :icon="CircleCheck"
             round
-            @click="submit"
-            :disabled="newRows.some((item) => item.new)"
+            @click="saveSubmit('submit')"
             >提交</el-button
           >
         </template>
@@ -25,7 +30,11 @@
           <el-button type="info" :icon="CircleClose" round @click="reject"
             >驳回</el-button
           >
-          <el-button type="primary" :icon="CircleCheck" round @click="pass"
+          <el-button
+            type="primary"
+            :icon="CircleCheck"
+            round
+            @click="saveSubmit('pass')"
             >提交</el-button
           >
         </template>
@@ -37,7 +46,7 @@
           <template #header>
             <div class="card-header">
               <span class="circle-primary"></span>
-              <span>建装站计划填报单-2023/2/10</span>
+              <span>{{ pageInfo.fillName }}</span>
             </div>
           </template>
           <div class="list-card-body">
@@ -47,12 +56,29 @@
                 :prop="col.prop"
                 :label="col.label"
                 :key="col.prop"
-                show-overflow-tooltip
+                show-overflowDirection-tooltip
                 align="center"
               >
                 <template v-slot="{ row, $index }">
-                  <div v-if="!row.new">{{ row[col.prop] }}</div>
-                  <el-input v-else v-model="row[col.prop]" />
+                  <div v-if="row.id && !changePlanStatus">
+                    {{ row[col.prop] }}
+                  </div>
+                  <template v-else>
+                    <el-select
+                      v-if="col.type === 'select'"
+                      v-model="row[col.prop]"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in col.options"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                    <el-input v-else v-model="row[col.prop]" />
+                  </template>
                 </template>
               </el-table-column>
             </el-table>
@@ -64,14 +90,15 @@
               @click="addPlan"
               >新增行</el-button
             >
-            <el-button
-              v-else
-              type="primary"
-              :icon="Refresh"
-              round
-              @click="changePlan"
-              >变更</el-button
-            >
+            <template v-else>
+              <el-button
+                type="primary"
+                :icon="Refresh"
+                round
+                @click="changePlan"
+                >变更</el-button
+              >
+            </template>
           </div>
         </el-card>
         <el-card class="box-card">
@@ -88,7 +115,7 @@
                 :prop="col.prop"
                 :label="col.label"
                 :key="col.prop"
-                show-overflow-tooltip
+                show-overflowDirection-tooltip
                 align="center"
               />
             </el-table>
@@ -96,10 +123,27 @@
         </el-card>
       </el-scrollbar>
     </div>
+    <el-dialog
+      v-model="opinionDialogVisb"
+      :title="opinionDialogTitle"
+      width="30vw"
+    >
+      <div class="form-label"></div>
+      <el-input
+        v-model="pageInfo.opinion"
+        class="form-content"
+        type="textarea"
+        :rows="5"
+        resize="none"
+      />
+      <template #footer>
+        <el-button type="primary" @click="dialogConfirm"> 确认 </el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import {
   Plus,
@@ -109,101 +153,243 @@ import {
   CircleClose,
   Refresh,
 } from "@element-plus/icons-vue";
+import {
+  supplierOptions,
+  stationNameOptions,
+  coalOptions,
+  flowDirectionOptions,
+  userOptions,
+  contractTypeOptions,
+} from "./selectOptions";
+import moment from "moment";
+import { ElMessage } from "element-plus";
+import {
+  saveFillData,
+  dispatchFillData,
+  getFillDetailByFillCode,
+  getFillFlowByFillCode,
+  rejectFillData,
+} from "@/api/dashboard";
 
+// 路由参数
 const router = useRouter();
 const currentRoute = useRoute();
-
 const pageStatus = computed(() => currentRoute.query.pageStatus);
-const planId = computed(() => currentRoute.query.id);
+const fillCode = computed<string>(() => currentRoute.query.fillCode as string);
 
-onMounted(() => {
-  if (planId) {
-    // 查询数据 planTable recordTable
-  }
+// 页面title、操作、opinion
+const date = moment().format("YYYY年MM月DD日");
+const pageInfo = reactive({
+  fillName: `监装站计划填报单 - ${date} `,
+  opinion: "",
+  operation: "",
 });
 // 表格data
 const planTableColumn = [
-  { prop: "station", label: "站台" },
-  { prop: "supplier", label: "供应商" },
+  {
+    prop: "staionName",
+    label: "站台",
+    type: "select",
+    options: stationNameOptions,
+  },
+  {
+    prop: "supplier",
+    label: "供应商",
+    type: "select",
+    options: supplierOptions,
+  },
   { prop: "effectiveStock", label: "有效库存(吨)" },
   { prop: "reportingPlan", label: "提报计划(列)" },
-  { prop: "flow", label: "流向" },
-  { prop: "user", label: "用户" },
-  { prop: "coalType", label: "煤种" },
-  { prop: "contractType", label: "合同类型" },
+  {
+    prop: "flowDirection",
+    label: "流向",
+    type: "select",
+    options: flowDirectionOptions,
+  },
+  {
+    prop: "user",
+    label: "用户",
+    type: "select",
+    options: userOptions,
+  },
+  {
+    prop: "coalType",
+    label: "煤种",
+    type: "select",
+    options: coalOptions,
+  },
+  {
+    prop: "contractType",
+    label: "合同类型",
+    type: "select",
+    options: contractTypeOptions,
+  },
 ];
-const planTable = ref<any>([
-  {
-    id: 1,
-    station: "物资万1",
-    supplier: "东辰",
-    effectiveStock: "900",
-    reportingPlan: "3",
-    flow: "区内外购",
-    user: "XX电厂",
-    coalType: "外购4500",
-    contractType: "长协",
-  },
-  {
-    id: 2,
-    station: "物资万2",
-    supplier: "东辰",
-    effectiveStock: "900",
-    reportingPlan: "3",
-    flow: "区内外购",
-    user: "XX电厂",
-    coalType: "外购4500",
-    contractType: "长协",
-  },
-]);
+const planTable = ref<any>([]);
 const recordTableColumn = [
-  { label: "操作", prop: "action" },
-  { label: "意见", prop: "suggestion" },
-  { label: "用户", prop: "user" },
-  { label: "时间", prop: "time" },
+  { label: "操作", prop: "operation" },
+  { label: "意见", prop: "opinion" },
+  { label: "用户", prop: "userName" },
+  { label: "时间", prop: "operationTime" },
 ];
-const recordTable = ref([
-  {
-    action: "提交审核",
-    suggestion: "xxx",
-    user: "李四",
-    time: "2023年2月20日 16:28:48",
-  },
-]);
+const recordTable = ref([]);
 
-// 新数据
-const newRows = ref<any[]>([]);
+// 查询日志
+const getRecordTable = () => {
+  getFillFlowByFillCode(fillCode.value).then((res: any) => {
+    console.log(res, "=====getFillFlowByFillCode");
+    recordTable.value = res.data
+      .map((item: any) => {
+        item.operationTime = moment(item.operationTime).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+        return item;
+      })
+      .sort(
+        (a: any, b: any) =>
+          new Date(b.operationTime).getTime() -
+          new Date(a.operationTime).getTime()
+      );
+  });
+};
+
+onMounted(() => {
+  if (fillCode.value) {
+    // 查询数据 planTable recordTable
+    getFillDetailByFillCode(fillCode.value).then((res: any) => {
+      planTable.value = res.data.fillDetailList.map((item: any) => {
+        item.reportingPlan =
+          item.dispatchingDepartment ||
+          item.businessDepartment ||
+          item.loadSupervisionStaion;
+        item.dispatchingDepartment
+          ? (item.currentReportingPlanKey = "dispatchingDepartment")
+          : item.businessDepartment
+          ? (item.currentReportingPlanKey = "businessDepartment")
+          : (item.currentReportingPlanKey = "loadSupervisionStaion");
+        return item;
+      });
+    });
+    getRecordTable();
+  }
+});
+
 const addPlan = () => {
   const newRow = {
-    new: true,
-    station: "",
+    staionName: "",
     supplier: "",
     effectiveStock: "",
     reportingPlan: "",
-    flow: "",
+    flowDirection: "",
     user: "",
     coalType: "",
     contractType: "",
   };
-  newRows.value.push(newRow);
   planTable.value.push(newRow);
 };
 
-// 前端保存 new判断 必填项校验
-const save = () => {
-  newRows.value.forEach((item) => {
-    delete item.new;
+// 校验函数
+const validate = () => {
+  return new Promise((resolve, reject) => {
+    const nullValue = planTable.value.find((item: any, index: number) =>
+      planTableColumn.find((propItem) => !item[propItem.prop])
+    );
+    if (nullValue) {
+      ElMessage.error("请填写完成所有字段");
+      reject(false);
+    } else {
+      resolve(true);
+    }
   });
 };
-// 提交newRows
-const submit = () => {
-  console.log(newRows.value, "======newRows");
+
+// 保存 提交 变更
+const saveSubmit = (type: string) => {
+  validate().then((valid) => {
+    const data = planTable.value.map((item: any) => {
+      item[item.currentReportingPlanKey || "loadSupervisionStaion"] =
+        item.reportingPlan;
+      return item;
+    });
+
+    if (type === "save") {
+      pageInfo.opinion = "";
+      pageInfo.operation = "保存填报信息";
+      saveFillData(data, pageInfo).then((res: any) => {
+        ElMessage.success("保存成功");
+      });
+    } else if (type === "submit") {
+      pageInfo.opinion = "通过";
+      pageInfo.operation = "提交审核";
+      dispatchFillData(data, pageInfo).then((res: any) => {
+        ElMessage.success("提交成功");
+        router.go(-1);
+      });
+    } else if (type === "changePlan") {
+      // 变更信息
+      pageInfo.operation = "变更信息";
+      saveFillData(data, pageInfo).then((res: any) => {
+        ElMessage.success("变更成功");
+        getRecordTable();
+        opinionDialogVisb.value = false;
+        changePlanStatus.value = false;
+      });
+    } else if (type === "pass") {
+      if (changePlanStatus.value) {
+        ElMessage.error("请先完成信息变更");
+      } else {
+        pageInfo.opinion = "通过";
+        pageInfo.operation = "审批通过";
+        dispatchFillData(data, pageInfo).then((res: any) => {
+          ElMessage.success("审批成功");
+          router.go(-1);
+        });
+      }
+    } else if (type === "reject") {
+      pageInfo.operation = "驳回";
+      rejectFillData({
+        fillCode: fillCode.value,
+        operation: pageInfo.operation,
+        opinion: pageInfo.opinion,
+      }).then((res: any) => {
+        opinionDialogVisb.value = false;
+        ElMessage.success("审批成功");
+        router.go(-1);
+      });
+    }
+  });
 };
 
-// 审核函数
-const changePlan = () => {};
-const reject = () => {};
-const pass = () => {};
+// 变更信息
+const changePlanStatus = ref(false);
+const opinionDialogVisb = ref(false);
+const opinionDialogTitle = ref("");
+const changePlan = () => {
+  if (changePlanStatus.value) {
+    validate().then((valid) => {
+      // 填写意见
+      opinionDialogTitle.value = "请填写变更理由";
+      opinionDialogVisb.value = true;
+    });
+  } else {
+    changePlanStatus.value = true;
+  }
+};
+// 驳回
+const reject = () => {
+  pageInfo.opinion = "";
+  opinionDialogTitle.value = "请填写驳回理由";
+  opinionDialogVisb.value = true;
+};
+
+// 意见弹窗confirm
+const dialogConfirm = () => {
+  if (changePlanStatus.value) {
+    saveSubmit("changePlan");
+  } else {
+    saveSubmit("reject");
+  }
+};
 </script>
 <style lang="less" scoped>
 .container {
