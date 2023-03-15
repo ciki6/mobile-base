@@ -45,7 +45,7 @@ export const getFillDetailByFillCode = (fillCode: string) => {
   return request({
     url: "/fill/getFillDetailByFillCode",
     method: "get",
-    params: { fillCode },
+    params: { fillCode, userId: userStoreState.userId },
   });
 };
 

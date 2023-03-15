@@ -6,18 +6,29 @@ export const userStore = defineStore("user", {
   state: () => {
     return {
       userId: "",
-      username: "",
+      userName: "",
     };
   },
   actions: {
+    setUserInfo(userInfo: any) {
+      this.userId = userInfo.userId;
+      this.userName = userInfo.userName;
+    },
     async login(apptoken: string) {
-      // const { data, ret } = await getUserInfoFromICE(apptoken);
-      const { data, ret } = await getUserInfoFromICEMock(apptoken);
+      let res: any = {};
+      if (import.meta.env.MODE === "development") {
+        res = await getUserInfoFromICEMock();
+      } else {
+        res = await getUserInfoFromICE(apptoken);
+      }
+      const { data, ret } = res;
       console.log(data, ret);
       if (ret === 0 || ret === "0") {
-        const username = data?.username;
-        this.username = username;
+        const userName = data?.userName;
+        this.userName = userName;
         this.userId = data?.employee_num ?? "";
+        sessionStorage.setItem("userId", this.userId);
+        sessionStorage.setItem("userName", this.userName);
       } else {
         ElMessage.error(`调用ICE登录接口失败`);
         return Promise.reject("error");

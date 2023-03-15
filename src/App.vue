@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { userStore } from "./store/user";
 import router from "./router";
+import { onMounted } from "vue";
 const user_store = userStore();
 let apptoken = "";
 const params = new URLSearchParams(window.location.search);
@@ -9,15 +10,26 @@ if (params.get("apptoken") !== null) {
 } else {
   console.log("获取apptoken失败");
 }
-
-user_store
-  .login(apptoken)
-  .then(() => {
-    router.push("/dashboard");
-  })
-  .catch((d) => {
-    console.log(d);
-  });
+onMounted(() => {
+  if (
+    !sessionStorage.getItem("userId") &&
+    !sessionStorage.getItem("userName")
+  ) {
+    user_store
+      .login(apptoken)
+      .then(() => {
+        router.push("/dashboard");
+      })
+      .catch((d) => {
+        console.log(d);
+      });
+  } else {
+    user_store.setUserInfo({
+      userId: sessionStorage.getItem("userId"),
+      userName: sessionStorage.getItem("userName"),
+    });
+  }
+});
 </script>
 
 <template>

@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse } from "axios";
 import router from "../router";
 import config from "../config";
 import { ElMessage } from "element-plus";
-const { baseURL, contentType, timeout, successCode } = config;
+const { contentType, timeout, successCode } = config;
 const handleCode = (code: number, msg: string) => {
   switch (code) {
     case 404:
@@ -17,11 +17,12 @@ const handleCode = (code: number, msg: string) => {
 };
 const service: any = axios.create({
   timeout,
-  baseURL,
+  baseURL: import.meta.env.VITE_HOST,
   headers: {
     "Content-Type": contentType,
   },
 });
+console.log(import.meta.env, "====import.meta.env");
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // const user_store = userStore();

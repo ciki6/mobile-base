@@ -257,7 +257,7 @@ onMounted(() => {
   if (fillCode.value) {
     // 查询数据 planTable recordTable
     getFillDetailByFillCode(fillCode.value).then((res: any) => {
-      planTable.value = res.data.map((item: any) => {
+      planTable.value = res.data.fillDetailList.map((item: any) => {
         item.reportingPlan =
           item.dispatchingDepartment ||
           item.businessDepartment ||
